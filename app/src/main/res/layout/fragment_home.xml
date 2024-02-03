@@ -26,7 +26,7 @@
         <TextView
             android:id="@+id/textView_Content"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="475dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="40dp"
             android:layout_marginRight="30dp"
@@ -35,22 +35,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/editTextText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="text" />
 
             <Button
                 android:id="@+id/button_Send"
-                android:layout_width="80dp"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:text="@string/send" />
         </LinearLayout>
