@@ -126,6 +126,8 @@ public class LoginFragment extends Fragment {
 
                 loginViewModel.login(username, password);
 
+
+
                 // Check the login result
                 LoginResult result = loginViewModel.getLoginResult().getValue();
                 if (result != null && result.getSuccess() != null) {
