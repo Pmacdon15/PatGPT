@@ -23,18 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
-    public void hideHamburgerMenu() {
-        // Lock the drawer so it can't be opened by swiping from the edge
-        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
-        // Hide the hamburger icon
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, binding.drawerLayout, binding.appBarMain.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        toggle.setDrawerIndicatorEnabled(false);
-        binding.drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
