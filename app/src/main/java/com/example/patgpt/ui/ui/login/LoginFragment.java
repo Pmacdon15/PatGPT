@@ -33,6 +33,13 @@ public class LoginFragment extends Fragment {
     private LoginViewModel loginViewModel;
     private FragmentLoginBinding binding;
 
+    // For the login button, check the login result and navigate to HomeFragment
+    private void navigateToHome() {
+        // If login is successful, navigate to HomeFragment
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(R.id.nav_home);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -83,6 +90,7 @@ public class LoginFragment extends Fragment {
                 }
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
+                    navigateToHome();
                 }
             }
         });
@@ -129,12 +137,12 @@ public class LoginFragment extends Fragment {
 
 
                 // Check the login result
-                LoginResult result = loginViewModel.getLoginResult().getValue();
-                if (result != null && result.getSuccess() != null) {
-                    // If login is successful, navigate to HomeFragment
-                    NavController navController = Navigation.findNavController(v);
-                    navController.navigate(R.id.nav_home);
-                }
+//                LoginResult result = loginViewModel.getLoginResult().getValue();
+//                if (result != null && result.getSuccess() != null) {
+//                    // If login is successful, navigate to HomeFragment
+//                    NavController navController = Navigation.findNavController(v);
+//                    navController.navigate(R.id.nav_home);
+//                }
             }
         });
 
