@@ -27,4 +27,5 @@
     <string name="share">Share</string>
     <string name="about">About</string>
     <string name="profile">Profile</string>
+    <string name="this_app_was_made_as_my_final_project_for_mobile_devlopment_it_uses_the_chat_gpt_api_to_handled_user_queries">This app was made as my final project for mobile development. It uses the Chat GPT API to handled user queries. Right now this is not a full stack app with a running db for users. However users will be able to test the app and set their name and profile image.</string>
 </resources>

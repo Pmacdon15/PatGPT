@@ -131,18 +131,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-
                 loginViewModel.login(username, password);
-
-
-
-                // Check the login result
-//                LoginResult result = loginViewModel.getLoginResult().getValue();
-//                if (result != null && result.getSuccess() != null) {
-//                    // If login is successful, navigate to HomeFragment
-//                    NavController navController = Navigation.findNavController(v);
-//                    navController.navigate(R.id.nav_home);
-//                }
             }
         });
 

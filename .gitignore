@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/src/main/res/values/
+/app/src/main/res/values-land/
+/app/src/main/res/values-night/
+/app/src/main/res/values-w600dp/
+/app/src/main/res/values-w1240dp/
+environment.xml
