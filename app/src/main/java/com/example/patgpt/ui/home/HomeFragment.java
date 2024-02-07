@@ -82,9 +82,7 @@ public class HomeFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         RequestBody requestBody = RequestBody.Companion.create(jsonBody.toString(), JSON);
-
 
         Request request = new Request.Builder()
                 .url(URL)
@@ -111,6 +109,7 @@ public class HomeFragment extends Fragment {
 
                     requireActivity().runOnUiThread(() -> {
                         // Set the TextView to display the content
+                        Log.d("Content", content);
                         textViewContent.setText(content);
                     });
                 } catch (JSONException e) {
