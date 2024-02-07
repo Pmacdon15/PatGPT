@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+//import androidx.lifecycle.ViewModelProvider;
 
 import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
@@ -35,31 +35,24 @@ public class HomeFragment extends Fragment {
 
 
     private static final String URL = "https://api.openai.com/v1/chat/completions";
-    private Button buttonSend;
     private TextView textViewContent;
     private EditText editTextPrompt;
-    private String API_KEY;
     private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+//        HomeViewModel homeViewModel =
+//                new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        buttonSend = root.findViewById(R.id.button_Send);
+        Button buttonSend = root.findViewById(R.id.button_Send);
         textViewContent = root.findViewById(R.id.textView_Content);
         editTextPrompt = root.findViewById(R.id.editText_Prompt);
 
 
-        buttonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                makeApiRequest();
-            }
-        });
+        buttonSend.setOnClickListener(view -> makeApiRequest());
 
         return root;
     }
@@ -70,7 +63,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void makeApiRequest() {
-        API_KEY = getAPIKey(requireContext());
+        String API_KEY = getAPIKey(requireContext());
         OkHttpClient client = new OkHttpClient();
 
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -81,7 +74,7 @@ public class HomeFragment extends Fragment {
             JSONArray messages = new JSONArray();
             JSONObject message = new JSONObject();
             message.put("role", "user");
-            HomeViewModel inputText;
+//            HomeViewModel inputText;
             message.put("content", editTextPrompt.getText().toString());
             messages.put(message);
             jsonBody.put("messages", messages);
@@ -105,18 +98,30 @@ public class HomeFragment extends Fragment {
                 assert response.body() != null;
                 final String responseData = response.body().string();
 
-                requireActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        textViewContent.setText(responseData);
-                    }
-                });
+                try {
+                    // Create a JSONObject from the response data
+                    JSONObject jsonObject = new JSONObject(responseData);
+
+                    // Navigate to the 'content' field in the JSON structure
+                    String content = jsonObject.getJSONArray("choices")
+                            .getJSONObject(0)
+                            .getJSONObject("message")
+                            .getString("content");
+
+                    requireActivity().runOnUiThread(() -> {
+                        // Set the TextView to display the content
+                        textViewContent.setText(content);
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
 
+
             @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("OkHttpError", "Error: " + e.toString());
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e("OkHttpError", "Error: " + e);
                 // Handle error here
             }
         });
