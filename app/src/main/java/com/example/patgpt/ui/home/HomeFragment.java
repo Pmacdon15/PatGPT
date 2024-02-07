@@ -83,7 +83,8 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
 
-        RequestBody requestBody = RequestBody.create(JSON, jsonBody.toString());
+        RequestBody requestBody = RequestBody.Companion.create(jsonBody.toString(), JSON);
+
 
         Request request = new Request.Builder()
                 .url(URL)
