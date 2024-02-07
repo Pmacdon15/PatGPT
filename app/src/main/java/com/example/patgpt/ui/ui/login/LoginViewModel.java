@@ -43,8 +43,8 @@ public class LoginViewModel extends ViewModel {
 //    }
     public void login(String username, String password) {
         // Dummy user data
-        String dummyUsername = "admin1";
-        String dummyPassword = "admin1";
+        String dummyUsername = "admin";
+        String dummyPassword = "admin";
 
         if (username.equals(dummyUsername) && password.equals(dummyPassword)) {
             // Login successful
@@ -81,6 +81,6 @@ public class LoginViewModel extends ViewModel {
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
+        return password != null && password.trim().length() > 4;
     }
 }
