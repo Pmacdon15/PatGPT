@@ -7,7 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home">GPT</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="this_is_the_logo_for_the_app">This is the logo for the app</string>
@@ -25,8 +25,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="share">Share</string>
+    <string name="dalle">Dall E</string>
     <string name="about">About</string>
     <string name="profile">Profile</string>
     <string name="this_app_was_made_as_my_final_project_for_mobile_devlopment_it_uses_the_chat_gpt_api_to_handled_user_queries">This app was made as my final project for mobile development. It uses the Chat GPT API to handled user queries. Right now this is not a full stack app with a running db for users. However users will be able to test the app and set their name and profile image.</string>
     <string name="get_answers">Get Answers</string>
+    <string name="menu_dalle">DALL E</string>
 </resources>
