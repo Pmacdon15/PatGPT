@@ -33,7 +33,6 @@ import okhttp3.Response;
 
 public class HomeFragment extends Fragment {
 
-
     private static final String URL = "https://api.openai.com/v1/chat/completions";
     private TextView textViewContent;
     private EditText editTextPrompt;
@@ -58,7 +57,6 @@ public class HomeFragment extends Fragment {
     }
 
     private String getAPIKey(Context context) {
-        Log.d("API_KEY", context.getString(R.string.API_KEY));
         return context.getString(R.string.API_KEY);
     }
 
