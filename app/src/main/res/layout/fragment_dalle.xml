@@ -19,13 +19,15 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/linearLayout"
         android:layout_below="@id/imageView2">
+
         <ImageView
             android:id="@+id/ImageView_Content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="40dp"
-            android:layout_marginRight="30dp" />
+            android:layout_marginRight="30dp"
+            android:contentDescription="@string/this_is_your_content" />
     </ScrollView>
 
     <LinearLayout
@@ -42,7 +44,7 @@
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="@string/get_answers"
+            android:hint="@string/get_images"
             android:importantForAutofill="no"
             android:inputType="text"
             android:minHeight="48dp"

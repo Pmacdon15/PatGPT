@@ -1,6 +1,8 @@
 package com.example.patgpt.ui;
 
 import android.content.Context;
+import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,10 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 
 import com.example.patgpt.R;
-import com.example.patgpt.databinding.FragmentHomeBinding;
+
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -43,30 +45,11 @@ public class DalleFragment extends Fragment {
     private static final String URL = "https://api.openai.com/v1/images/generations";
     private EditText editTextPrompt;
     private ImageView imageViewContent;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
+    private final String[] url = new String[1];
 
     public DalleFragment() {
         // Required empty public constructor
     }
-
-
-    // TODO: Rename and change types and number of parameters
-//    public static DalleFragment newInstance(String param1, String param2) {
-//        DalleFragment fragment = new DalleFragment();
-//        Bundle args = new Bundle();
-////        args.putString(ARG_PARAM1, param1);
-////        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +67,7 @@ public class DalleFragment extends Fragment {
         editTextPrompt = root.findViewById(R.id.editText_Prompt);
 
         buttonSend.setOnClickListener(view -> makeApiRequest());
+        imageViewContent.setOnClickListener(view -> shareImage(url[0]));
 
         // Inflate the layout for this fragment
         return root;
@@ -132,7 +116,7 @@ public class DalleFragment extends Fragment {
                 final String responseData = response.body().string();
 
                 Log.d("OkHttp", "Response: " + responseData);
-                final String[] url = {""};
+
                 try {
                     // Convert the response to a JSONObject
                     JSONObject jsonObject = new JSONObject(responseData);
@@ -171,5 +155,13 @@ public class DalleFragment extends Fragment {
                 // Handle error here
             }
         });
+
     }
+    public void shareImage(String imageUrl) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, imageUrl);
+        startActivity(Intent.createChooser(intent, "Share Image"));
+    }
+
 }
