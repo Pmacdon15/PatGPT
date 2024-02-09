@@ -19,8 +19,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/linearLayout"
         android:layout_below="@id/imageView2">
-        <TextView
-            android:id="@+id/textView_Content"
+        <ImageView
+            android:id="@+id/ImageView_Content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"

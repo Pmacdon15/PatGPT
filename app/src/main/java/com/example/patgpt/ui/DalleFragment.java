@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +42,7 @@ import okhttp3.Response;
 public class DalleFragment extends Fragment {
     private static final String URL = "https://api.openai.com/v1/images/generations";
     private EditText editTextPrompt;
-    private TextView textViewContent;
+    private ImageView imageViewContent;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -79,7 +80,7 @@ public class DalleFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_dalle, container, false);
         Button buttonSend = root.findViewById(R.id.button_Send);
-        textViewContent = root.findViewById(R.id.textView_Content);
+        imageViewContent = root.findViewById(R.id.ImageView_Content);
         editTextPrompt = root.findViewById(R.id.editText_Prompt);
 
         buttonSend.setOnClickListener(view -> makeApiRequest());
@@ -153,8 +154,12 @@ public class DalleFragment extends Fragment {
 //
                 requireActivity().runOnUiThread(() -> {
                     // Set the TextView to display the content
-                    Log.d("responseDate",responseData);
-                    textViewContent.setText(url[0]);
+                    //Log.d("responseDate",responseData);
+                    //textViewContent.setText(url[0]);
+                    // Make imageViewContent display the image from the URL
+
+                    Picasso.get().load(url[0]).into(imageViewContent);
+
                 });
 
             }
