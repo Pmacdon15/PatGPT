@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,8 +42,6 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//        HomeViewModel homeViewModel =
-//                new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -62,7 +62,14 @@ public class HomeFragment extends Fragment {
 
     private void makeApiRequest() {
         String API_KEY = getAPIKey(requireContext());
-        OkHttpClient client = new OkHttpClient();
+        // set textViewContent to loading string
+        textViewContent.setText(R.string.loading);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS) // Increase connect timeout
+                .writeTimeout(30, TimeUnit.SECONDS)   // Increase write timeout
+                .readTimeout(60, TimeUnit.SECONDS)    // Increase read timeout, especially important for your use case
+                .build();
 
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -106,6 +113,7 @@ public class HomeFragment extends Fragment {
                             .getString("content");
 
                     requireActivity().runOnUiThread(() -> {
+                        closeKeyboard(requireContext(), editTextPrompt);
                         // Set the TextView to display the content
                         Log.d("Content", content);
                         textViewContent.setText(content);
@@ -114,15 +122,19 @@ public class HomeFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-
-
-
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e("OkHttpError", "Error: " + e);
                 // Handle error here
             }
         });
+    }
+    public void closeKeyboard(Context context, EditText editText) {
+        // Clear the EditText
+        editText.setText("");
+        // Close the keyboard
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
     @Override

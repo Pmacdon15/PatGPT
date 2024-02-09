@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,11 +37,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-///**
-// * A simple {@link Fragment} subclass.
-// * Use the {@link DalleFragment#newInstance} factory method to
-// * create an instance of this fragment.
-// */
 public class DalleFragment extends Fragment {
     private static final String URL = "https://api.openai.com/v1/images/generations";
     private EditText editTextPrompt;
@@ -72,13 +68,13 @@ public class DalleFragment extends Fragment {
         // Inflate the layout for this fragment
         return root;
     }
-
-
     private String getAPIKey(Context context) {
         return context.getString(R.string.API_KEY);
     }
-
     private void makeApiRequest() {
+        // Set loading image to imageview
+        imageViewContent.setImageResource(R.drawable.loading);
+        // Get the API key from the resources
         String API_KEY = getAPIKey(requireContext());
         // Customize the OkHttpClient with increased timeouts
         OkHttpClient client = new OkHttpClient.Builder()
@@ -137,17 +133,13 @@ public class DalleFragment extends Fragment {
                 }
 //
                 requireActivity().runOnUiThread(() -> {
-                    // Set the TextView to display the content
-                    //Log.d("responseDate",responseData);
-                    //textViewContent.setText(url[0]);
+                    // Close the keyboard and clear the EditText
+                    closeKeyboard(requireContext(), editTextPrompt);
                     // Make imageViewContent display the image from the URL
-
                     Picasso.get().load(url[0]).into(imageViewContent);
 
                 });
-
             }
-
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -156,6 +148,13 @@ public class DalleFragment extends Fragment {
             }
         });
 
+    }
+    public void closeKeyboard(Context context, EditText editText) {
+        // Clear the EditText
+        editText.setText("");
+        // Close the keyboard
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
     public void shareImage(String imageUrl) {
         Intent intent = new Intent(Intent.ACTION_SEND);
