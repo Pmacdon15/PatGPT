@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -94,8 +95,13 @@ public class DalleFragment extends Fragment {
 
     private void makeApiRequest() {
         String API_KEY = getAPIKey(requireContext());
-        Log.d("API_KEY", API_KEY);
-        OkHttpClient client = new OkHttpClient();
+        // Customize the OkHttpClient with increased timeouts
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS) // Increase connect timeout
+                .writeTimeout(30, TimeUnit.SECONDS)   // Increase write timeout
+                .readTimeout(60, TimeUnit.SECONDS)    // Increase read timeout, especially important for your use case
+                .build();
+
 
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -125,29 +131,30 @@ public class DalleFragment extends Fragment {
                 final String responseData = response.body().string();
 
                 Log.d("OkHttp", "Response: " + responseData);
-//                final String[] url = {""};
-//                try {
-//                    // Convert the response to a JSONObject
-//                    JSONObject jsonObject = new JSONObject(responseData);
-//
-//                    // Get the 'data' JSONArray
-//                    JSONArray dataArray = jsonObject.getJSONArray("data");
-//
-//                    // Get the first object of 'data' array
-//                    JSONObject dataObject = dataArray.getJSONObject(0);
-//
-//                    // Get the 'url' string
-//                    url[0] = dataObject.getString("url");
-//
-//                    // Now 'url' contains the URL string you need
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
+                final String[] url = {""};
+                try {
+                    // Convert the response to a JSONObject
+                    JSONObject jsonObject = new JSONObject(responseData);
+
+                    // Get the 'data' JSONArray
+                    JSONArray dataArray = jsonObject.getJSONArray("data");
+
+                    // Get the first object of 'data' array
+                    JSONObject dataObject = dataArray.getJSONObject(0);
+
+                    // Get the 'url' string
+                    url[0] = dataObject.getString("url");
+                    Log.d("url", url[0]);
+
+                    // Now 'url' contains the URL string you need
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 //
                 requireActivity().runOnUiThread(() -> {
                     // Set the TextView to display the content
-                    Log.d("url",responseData);
-                    textViewContent.setText(responseData);
+                    Log.d("responseDate",responseData);
+                    textViewContent.setText(url[0]);
                 });
 
             }
