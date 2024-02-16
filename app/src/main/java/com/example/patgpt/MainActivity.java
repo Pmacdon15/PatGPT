@@ -1,5 +1,7 @@
 package com.example.patgpt;
 
+import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -16,10 +18,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.patgpt.databinding.ActivityMainBinding;
+import android.database.sqlite.SQLiteDatabase;
+
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+
+    static Uri imageProfileUri;
 
 
     @Override
@@ -37,6 +43,22 @@ public class MainActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
+
+
+        try (SQLiteDatabase db = new DatabaseHelper(this).getWritableDatabase()) {
+            // Insert data into the database
+            ContentValues values = new ContentValues();
+            values.put(UserDB.COLUMN_EMAIL, "admin");
+            values.put(UserDB.COLUMN_FIRST_NAME, "Admin");
+            values.put(UserDB.COLUMN_LAST_NAME, "Admin");
+            values.put(UserDB.COLUMN_PASSWORD, "admin");
+            db.insert(UserDB.TABLE_NAME, null, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each

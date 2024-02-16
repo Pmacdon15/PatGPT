@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import android.content.Context;
 import android.util.Patterns;
 
+import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
 import com.example.patgpt.ui.data.LoginRepository;
 import com.example.patgpt.ui.data.Result;
@@ -17,10 +19,17 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
+    private DatabaseHelper databaseHelper;
 
-    LoginViewModel(LoginRepository loginRepository) {
+    public LoginViewModel(LoginRepository loginRepository, Context context) {
         this.loginRepository = loginRepository;
+        this.databaseHelper = new DatabaseHelper(context); // Initialize DatabaseHelper
     }
+
+
+//    LoginViewModel(LoginRepository loginRepository) {
+//        this.loginRepository = loginRepository;
+//    }
 
     LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;
@@ -43,17 +52,26 @@ public class LoginViewModel extends ViewModel {
 //    }
     public void login(String username, String password) {
         // Dummy user data
-        String dummyUsername = "admin";
-        String dummyPassword = "admin";
+//        String dummyUsername = "admin";
+//        String dummyPassword = "admin";
 
-        if (username.equals(dummyUsername) && password.equals(dummyPassword)) {
+        boolean isLoggedIn = databaseHelper.checkUser(username, password);
+
+        if (isLoggedIn) {
             // Login successful
-            LoggedInUser data = new LoggedInUser(java.util.UUID.randomUUID().toString(), dummyUsername);
+            LoggedInUser data = new LoggedInUser(java.util.UUID.randomUUID().toString(), username);
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {
             // Login failed
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
+
+//        if (username.equals(dummyUsername) && password.equals(dummyPassword)) {
+//            LoggedInUser data = new LoggedInUser(java.util.UUID.randomUUID().toString(), dummyUsername);
+//            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+//        } else {
+//            loginResult.setValue(new LoginResult(R.string.login_failed));
+//        }
     }
 
 

@@ -131,12 +131,12 @@ public class DalleFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//
+
                 requireActivity().runOnUiThread(() -> {
-                    // Close the keyboard and clear the EditText
-                    closeKeyboard(requireContext(), editTextPrompt);
                     // Make imageViewContent display the image from the URL
                     Picasso.get().load(url[0]).into(imageViewContent);
+                    // Close the keyboard and clear the EditText
+                    closeKeyboard(requireContext(), editTextPrompt);
 
                 });
             }
