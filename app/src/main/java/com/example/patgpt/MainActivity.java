@@ -45,19 +45,7 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
 
-        try (SQLiteDatabase db = new DatabaseHelper(this).getWritableDatabase()) {
-            // Insert data into the database
-            ContentValues values = new ContentValues();
-            values.put(UserDB.COLUMN_EMAIL, "admin");
-            values.put(UserDB.COLUMN_FIRST_NAME, "Admin");
-            values.put(UserDB.COLUMN_LAST_NAME, "Admin");
-            values.put(UserDB.COLUMN_PASSWORD, "admin");
-            db.insert(UserDB.TABLE_NAME, null, values);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
+        SQLiteDatabase db = new DatabaseHelper(this).getWritableDatabase();
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;

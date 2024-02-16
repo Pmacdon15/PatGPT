@@ -1,5 +1,6 @@
 package com.example.patgpt;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,7 +23,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // create users table
-        db.execSQL(UserDB.CREATE_TABLE);
+       db.execSQL(UserDB.CREATE_TABLE);
+        // Create tables
+
+        // Insert data into the database
+        ContentValues values = new ContentValues();
+        values.put(UserDB.COLUMN_EMAIL, "admin");
+        values.put(UserDB.COLUMN_FIRST_NAME, "Admin");
+        values.put(UserDB.COLUMN_LAST_NAME, "Admin");
+        values.put(UserDB.COLUMN_PASSWORD, "admin");
+        db.insert(UserDB.TABLE_NAME, null, values);
     }
 
     @Override

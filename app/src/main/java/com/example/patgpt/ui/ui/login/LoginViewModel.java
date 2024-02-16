@@ -10,7 +10,7 @@ import android.util.Patterns;
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
 import com.example.patgpt.ui.data.LoginRepository;
-import com.example.patgpt.ui.data.Result;
+
 import com.example.patgpt.ui.data.model.LoggedInUser;
 //import com.example.patgpt.ui.R;
 
@@ -51,16 +51,13 @@ public class LoginViewModel extends ViewModel {
 //        }
 //    }
     public void login(String username, String password) {
-        // Dummy user data
-//        String dummyUsername = "admin";
-//        String dummyPassword = "admin";
-
         boolean isLoggedIn = databaseHelper.checkUser(username, password);
 
         if (isLoggedIn) {
             // Login successful
             LoggedInUser data = new LoggedInUser(java.util.UUID.randomUUID().toString(), username);
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+
         } else {
             // Login failed
             loginResult.setValue(new LoginResult(R.string.login_failed));
