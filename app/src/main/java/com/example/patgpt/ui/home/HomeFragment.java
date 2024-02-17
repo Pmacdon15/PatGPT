@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment {
     private TextView textViewContent;
     private EditText editTextPrompt;
     private FragmentHomeBinding binding;
+   // private String prompt;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class HomeFragment extends Fragment {
 
     private void makeApiRequest() {
         String API_KEY = getAPIKey(requireContext());
+        String prompt = editTextPrompt.getText().toString();
         // set textViewContent to loading string
         textViewContent.setText(R.string.loading);
 
@@ -129,11 +131,14 @@ public class HomeFragment extends Fragment {
                             .getJSONObject("message")
                             .getString("content");
 
+                    String output = prompt+ ":\n \n \n" + content;
+
                     requireActivity().runOnUiThread(() -> {
                         closeKeyboard(requireContext(), editTextPrompt);
                         // Set the TextView to display the content
                         Log.d("Content", content);
-                        textViewContent.setText(content);
+                        Log.d("Output", output);
+                        textViewContent.setText(output);
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
