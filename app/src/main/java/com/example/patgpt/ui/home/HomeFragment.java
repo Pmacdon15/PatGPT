@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 //import androidx.lifecycle.ViewModelProvider;
 
@@ -53,7 +54,22 @@ public class HomeFragment extends Fragment {
 
         buttonSend.setOnClickListener(view -> makeApiRequest());
 
+        // If screen rotates, restore the content of the TextViewContent
+        if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
         return root;
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("savedContent", textViewContent.getText().toString());
+    }
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            String savedContent = savedInstanceState.getString("savedContent");
+            textViewContent.setText(savedContent);
+        }
     }
 
     private String getAPIKey(Context context) {
@@ -123,6 +139,7 @@ public class HomeFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e("OkHttpError", "Error: " + e);
@@ -130,6 +147,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
     public void closeKeyboard(Context context, EditText editText) {
         // Clear the EditText
         editText.setText("");
