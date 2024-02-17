@@ -1,6 +1,7 @@
 package com.example.patgpt.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,7 +55,7 @@ public class HomeFragment extends Fragment {
 
 
         buttonSend.setOnClickListener(view -> makeApiRequest());
-
+        textViewContent.setOnClickListener(this::shareContent);
         // If screen rotates, restore the content of the TextViewContent
         if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
         return root;
@@ -130,7 +131,7 @@ public class HomeFragment extends Fragment {
                             .getJSONObject(0)
                             .getJSONObject("message")
                             .getString("content");
-
+                    // Trailing line breaks for better functionality when scrolling the screen
                     String output = prompt+ ":\n \n \n" + content + "\n \n \n \n \n";
 
                     requireActivity().runOnUiThread(() -> {
@@ -159,6 +160,16 @@ public class HomeFragment extends Fragment {
         // Close the keyboard
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
+
+    public void shareContent(View view) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, textViewContent.getText().toString());
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 
     @Override
