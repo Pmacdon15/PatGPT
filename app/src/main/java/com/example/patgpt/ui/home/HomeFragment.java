@@ -131,7 +131,7 @@ public class HomeFragment extends Fragment {
                             .getJSONObject("message")
                             .getString("content");
 
-                    String output = prompt+ ":\n \n \n" + content;
+                    String output = prompt+ ":\n \n \n" + content + "\n \n \n \n \n";
 
                     requireActivity().runOnUiThread(() -> {
                         closeKeyboard(requireContext(), editTextPrompt);
