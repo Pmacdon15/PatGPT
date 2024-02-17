@@ -63,9 +63,28 @@ public class DalleFragment extends Fragment {
 
         buttonSend.setOnClickListener(view -> makeApiRequest());
         imageViewContent.setOnClickListener(view -> shareImage(url[0]));
+        // If screen rotates, restore the content of the ImageViewContent
+        if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
 
         // Inflate the layout for this fragment
         return root;
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save the url of the imageViewContent
+        outState.putString("url", url[0]);
+    }
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        // Restore the url of the imageViewContent
+        if (savedInstanceState != null) {
+            url[0] = savedInstanceState.getString("url");
+            if (url[0] != null) {
+                Picasso.get().load(url[0]).into(imageViewContent);
+            }
+        }
     }
     private String getAPIKey(Context context) {
         //Log.d("API_KEY", context.getString(R.string.API_KEY));
