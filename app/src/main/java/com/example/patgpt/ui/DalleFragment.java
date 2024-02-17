@@ -69,6 +69,7 @@ public class DalleFragment extends Fragment {
         return root;
     }
     private String getAPIKey(Context context) {
+        //Log.d("API_KEY", context.getString(R.string.API_KEY));
         return context.getString(R.string.API_KEY);
     }
     private void makeApiRequest() {

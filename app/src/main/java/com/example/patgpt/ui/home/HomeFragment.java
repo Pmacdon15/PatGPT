@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment {
     }
 
     private String getAPIKey(Context context) {
+        //Log.d("API_KEY", context.getString(R.string.API_KEY));
         return context.getString(R.string.API_KEY);
     }
 
