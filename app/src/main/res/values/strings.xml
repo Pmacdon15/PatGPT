@@ -38,4 +38,6 @@
     <string name="profile_image">Profile Image</string>
     <string name="enter_a_name_to_update_your_first_name">Enter a Name to update your first name.</string>
     <string name="edit_first_name">Edit First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="edit_last_name">Edit Last Name</string>
 </resources>

@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
 
         android:contentDescription="@string/profile_image"
-        app:srcCompat="@drawable/profileimage" />
+        app:srcCompat="@drawable/profileimage"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/textView_First_Name"
@@ -35,5 +36,29 @@
         android:id="@+id/button_Edit_First_Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/edit_first_name"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/textView_Last_Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textview" />
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:text="@string/last_name"
+        android:autofillHints="" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_last_name"
         android:textColor="#000000" />
 </LinearLayout>

@@ -69,6 +69,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return firstName;
     }
+    public String getLastName(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + UserDB.COLUMN_LAST_NAME + " FROM " + UserDB.TABLE_NAME + " WHERE "
+                + UserDB.COLUMN_EMAIL + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{email});
+        String lastName = "";
+        if (cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex(UserDB.COLUMN_LAST_NAME);
+            if (columnIndex != -1) {
+                lastName = cursor.getString(columnIndex);
+            }
+        }
+        cursor.close();
+        return lastName;
+    }
 
     public boolean editUserFirstNameDB(String email, String newFirstName) {
         SQLiteDatabase db = this.getWritableDatabase();
