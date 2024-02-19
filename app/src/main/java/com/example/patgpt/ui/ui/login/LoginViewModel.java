@@ -21,6 +21,8 @@ public class LoginViewModel extends ViewModel {
     private LoginRepository loginRepository;
     private DatabaseHelper databaseHelper;
 
+    public static String profileUsername;
+
     public LoginViewModel(LoginRepository loginRepository, Context context) {
         this.loginRepository = loginRepository;
         this.databaseHelper = new DatabaseHelper(context); // Initialize DatabaseHelper
@@ -56,22 +58,14 @@ public class LoginViewModel extends ViewModel {
         if (isLoggedIn) {
             // Login successful
             LoggedInUser data = new LoggedInUser(java.util.UUID.randomUUID().toString(), username);
+            profileUsername = username;
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
 
         } else {
             // Login failed
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
-
-//        if (username.equals(dummyUsername) && password.equals(dummyPassword)) {
-//            LoggedInUser data = new LoggedInUser(java.util.UUID.randomUUID().toString(), dummyUsername);
-//            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-//        } else {
-//            loginResult.setValue(new LoginResult(R.string.login_failed));
-//        }
     }
-
-
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
