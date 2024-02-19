@@ -44,22 +44,24 @@ public class ProfileFragment extends Fragment {
         return root;
     }
     private void initializeViews(View rootView) {
+        // Set the text views with the current Information
         textviewFirstName = rootView.findViewById(R.id.textView_First_Name);
-        textviewLastName = rootView.findViewById(R.id.textView_Last_Name);
-//        try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
-//            String currentFirstName = databaseHelper.getFirstName(LoginViewModel.profileUsername);
-//            textviewFirstName.setText(currentFirstName);
-//        } catch (Exception e) {
-//            Log.e("Error", "An error occurred while accessing the database", e);
-//        }
-        SetFirstName();
-        SetLastName();
+        textviewLastName = rootView.findViewById(R.id.textView_Last_Name);//
+        SetFirstNameTextView();
+        SetLastNameTextView();
 
+        // Set the edit texts
         editTextFirstName = rootView.findViewById(R.id.editText_First_Name);
+        editTextLastName = rootView.findViewById(R.id.editText_Last_Name);
+
+        // Set on clicks for the buttons
         Button buttonEditFirstName = rootView.findViewById(R.id.button_Edit_First_Name);
         buttonEditFirstName.setOnClickListener(this::editFirstNameProfilePage);
+        Button buttonEditLastName = rootView.findViewById(R.id.button_Edit_Last_Name);
+        buttonEditLastName.setOnClickListener(this::editLastNameProfilePage);
     }
-    private void SetFirstName() {
+    // Set The Text views
+    private void SetFirstNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
             String currentFirstName = databaseHelper.getFirstName(LoginViewModel.profileUsername);
             textviewFirstName.setText(currentFirstName);
@@ -67,7 +69,7 @@ public class ProfileFragment extends Fragment {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
     }
-    private void SetLastName() {
+    private void SetLastNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
             String currentLastName = databaseHelper.getLastName(LoginViewModel.profileUsername);
             textviewLastName.setText(currentLastName);
@@ -75,6 +77,7 @@ public class ProfileFragment extends Fragment {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
     }
+    // Button Clicks
     public void editFirstNameProfilePage(View view) {
         Log.d("Maintenance", " Edit First Name Button Clicked");
         String newFirstName = editTextFirstName.getText().toString();
@@ -85,6 +88,21 @@ public class ProfileFragment extends Fragment {
                 textviewFirstName.setText(newFirstName);
             } else {
                 Log.d("Maintenance", "First Name Not Updated");
+            }
+        } catch (Exception e) {
+            Log.e("Error", "An error occurred while accessing the database", e);
+        }
+    }
+    public void editLastNameProfilePage(View view) {
+        Log.d("Maintenance", " Edit Last Name Button Clicked");
+        String newLastName = editTextLastName.getText().toString();
+        try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
+            if (databaseHelper.editUserLastNameDB(LoginViewModel.profileUsername, newLastName)) {
+                Log.d("Maintenance", "Last Name Updated");
+                Log.d("newLastName", newLastName);
+                textviewLastName.setText(newLastName);
+            } else {
+                Log.d("Maintenance", "Last Name Not Updated");
             }
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);

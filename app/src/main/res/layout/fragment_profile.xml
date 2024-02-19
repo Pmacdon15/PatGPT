@@ -42,21 +42,20 @@
     <TextView
         android:id="@+id/textView_Last_Name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/textview" />
+        android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/editText_Last_Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
+        android:hint="@string/last_name"
         android:inputType="text"
-        android:minHeight="48dp"
-        android:text="@string/last_name"
-        android:autofillHints="" />
+        android:minHeight="48dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_Edit_Last_Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/edit_last_name"

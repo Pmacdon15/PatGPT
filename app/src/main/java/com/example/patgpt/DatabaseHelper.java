@@ -92,6 +92,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int rowsAffected = db.update(UserDB.TABLE_NAME, values, UserDB.COLUMN_EMAIL + " = ?", new String[]{email});
         return rowsAffected > 0;
     }
-
+    public boolean editUserLastNameDB(String email, String newLastName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(UserDB.COLUMN_LAST_NAME, newLastName);
+        int rowsAffected = db.update(UserDB.TABLE_NAME, values, UserDB.COLUMN_EMAIL + " = ?", new String[]{email});
+        return rowsAffected > 0;
+    }
 }
 
