@@ -23,10 +23,8 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private String currentFirstName;
     private TextView textviewFirstName;
     private EditText editTextFirstName;
-    private Button buttonEditFirstName;
 
 
     //    public static ProfileFragment newInstance() {
@@ -53,25 +51,31 @@ public class ProfileFragment extends Fragment {
     }
     private void initializeViews(View rootView) {
         textviewFirstName = rootView.findViewById(R.id.textView_First_Name);
-        DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
-        currentFirstName = databaseHelper.getFirstName(LoginViewModel.profileUsername);
-        textviewFirstName.setText(currentFirstName);
-        editTextFirstName = rootView.findViewById(R.id.editText_First_Name);
-        buttonEditFirstName = rootView.findViewById(R.id.button_Edit_First_Name);
-        buttonEditFirstName.setOnClickListener(this::editFirstNameProfilePage);
-    }
-    public void editFirstNameProfilePage(View view) {
-        Log.d("Maintenance", " Edit First Name Button Clicked");
-        // call  editUserFirstName method from DatabaseHelper
-        DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
-        String newFirstName = editTextFirstName.getText().toString();
-        if (databaseHelper.editUserFirstNameDB(LoginViewModel.profileUsername, newFirstName)) {
-            Log.d("Maintenance", "First Name Updated");
-            Log.d("newFirstName", newFirstName);
-            textviewFirstName.setText(newFirstName);
-        } else {
-            Log.d("Maintenance", "First Name Not Updated");
+        try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
+            String currentFirstName = databaseHelper.getFirstName(LoginViewModel.profileUsername);
+            textviewFirstName.setText(currentFirstName);
+        } catch (Exception e) {
+            Log.e("Error", "An error occurred while accessing the database", e);
         }
 
+        editTextFirstName = rootView.findViewById(R.id.editText_First_Name);
+        Button buttonEditFirstName = rootView.findViewById(R.id.button_Edit_First_Name);
+        buttonEditFirstName.setOnClickListener(this::editFirstNameProfilePage);
+    }
+
+    public void editFirstNameProfilePage(View view) {
+        Log.d("Maintenance", " Edit First Name Button Clicked");
+        String newFirstName = editTextFirstName.getText().toString();
+        try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
+            if (databaseHelper.editUserFirstNameDB(LoginViewModel.profileUsername, newFirstName)) {
+                Log.d("Maintenance", "First Name Updated");
+                Log.d("newFirstName", newFirstName);
+                textviewFirstName.setText(newFirstName);
+            } else {
+                Log.d("Maintenance", "First Name Not Updated");
+            }
+        } catch (Exception e) {
+            Log.e("Error", "An error occurred while accessing the database", e);
+        }
     }
 }
