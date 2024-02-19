@@ -54,6 +54,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return result;
     }
+    public String getFirstName(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + UserDB.COLUMN_FIRST_NAME + " FROM " + UserDB.TABLE_NAME + " WHERE "
+                + UserDB.COLUMN_EMAIL + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{email});
+        String firstName = "";
+        if (cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex(UserDB.COLUMN_FIRST_NAME);
+            if (columnIndex != -1) {
+                firstName = cursor.getString(columnIndex);
+            }
+        }
+        cursor.close();
+        return firstName;
+    }
 
     public boolean editUserFirstNameDB(String email, String newFirstName) {
         SQLiteDatabase db = this.getWritableDatabase();

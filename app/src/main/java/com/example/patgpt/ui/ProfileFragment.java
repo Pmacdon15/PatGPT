@@ -23,6 +23,7 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private String currentFirstName;
     private TextView textviewFirstName;
     private EditText editTextFirstName;
     private Button buttonEditFirstName;
@@ -52,7 +53,9 @@ public class ProfileFragment extends Fragment {
     }
     private void initializeViews(View rootView) {
         textviewFirstName = rootView.findViewById(R.id.textView_First_Name);
-        textviewFirstName.setText(LoginViewModel.profileUsername);
+        DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+        currentFirstName = databaseHelper.getFirstName(LoginViewModel.profileUsername);
+        textviewFirstName.setText(currentFirstName);
         editTextFirstName = rootView.findViewById(R.id.editText_First_Name);
         buttonEditFirstName = rootView.findViewById(R.id.button_Edit_First_Name);
         buttonEditFirstName.setOnClickListener(this::editFirstNameProfilePage);
