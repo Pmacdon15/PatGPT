@@ -15,7 +15,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "AppDBManager.db";
 
     public DatabaseHelper(Context context) {
-
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -23,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // create users table
-       db.execSQL(UserDB.CREATE_TABLE);
+        db.execSQL(UserDB.CREATE_TABLE);
         // Create tables
 
         // Insert data into the database
@@ -55,4 +54,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return result;
     }
+
+    public boolean editUserFirstNameDB(String email, String newFirstName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(UserDB.COLUMN_FIRST_NAME, newFirstName);
+        int rowsAffected = db.update(UserDB.TABLE_NAME, values, UserDB.COLUMN_EMAIL + " = ?", new String[]{email});
+        return rowsAffected > 0;
+    }
+
 }
+

@@ -33,4 +33,9 @@
     <string name="menu_dalle">DALL E</string>
     <string name="todo">TODO</string>
     <string name="loading">Loading . . .</string>
+    <string name="first_name">First Name</string>
+    <string name="textview">TextView</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="enter_a_name_to_update_your_first_name">Enter a Name to update your first name.</string>
+    <string name="edit_first_name">Edit First Name</string>
 </resources>
