@@ -40,4 +40,8 @@
     <string name="edit_first_name">Edit First Name</string>
     <string name="last_name">Last Name</string>
     <string name="edit_last_name">Edit Last Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="edit_password">Edit Password</string>
 </resources>

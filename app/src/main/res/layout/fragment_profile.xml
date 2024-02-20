@@ -1,63 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.ProfileFragment" >
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView3"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.ProfileFragment">
 
-        android:contentDescription="@string/profile_image"
-        app:srcCompat="@drawable/profileimage"
-        tools:ignore="ImageContrastCheck" />
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-    <TextView
-        android:id="@+id/textView_First_Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/textview" />
+            android:contentDescription="@string/profile_image"
+            app:srcCompat="@drawable/profileimage"
+            tools:ignore="ImageContrastCheck" />
 
-    <EditText
-        android:id="@+id/editText_First_Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/first_name"
-        android:inputType="text"
-        android:minHeight="48dp" />
+        <TextView
+            android:id="@+id/textView_First_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textview" />
 
-    <Button
-        android:id="@+id/button_Edit_First_Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_first_name"
-        android:textColor="#000000" />
+        <EditText
+            android:id="@+id/editText_First_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/first_name"
+            android:inputType="text"
+            android:minHeight="48dp" />
 
-    <TextView
-        android:id="@+id/textView_Last_Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button_Edit_First_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_first_name"
+            android:textColor="#000000" />
 
-    <EditText
-        android:id="@+id/editText_Last_Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/last_name"
-        android:inputType="text"
-        android:minHeight="48dp" />
+        <TextView
+            android:id="@+id/textView_Last_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/button_Edit_Last_Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_last_name"
-        android:textColor="#000000" />
-</LinearLayout>
+        <EditText
+            android:id="@+id/editText_Last_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/last_name"
+            android:inputType="text"
+            android:minHeight="48dp" />
+
+        <Button
+            android:id="@+id/button_Edit_Last_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_last_name"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/editTextPassword_Current"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/current_password"
+            android:inputType="textPassword"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/editTextPassword_New"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/new_password"
+            android:inputType="textPassword"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/editTextPassword_Confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:minHeight="48dp" />
+
+        <Button
+            android:id="@+id/button_Edit_Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_password"
+            android:textColor="#000000" />
+    </LinearLayout>
+</ScrollView>

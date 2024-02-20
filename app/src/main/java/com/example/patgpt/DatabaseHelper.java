@@ -99,5 +99,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int rowsAffected = db.update(UserDB.TABLE_NAME, values, UserDB.COLUMN_EMAIL + " = ?", new String[]{email});
         return rowsAffected > 0;
     }
+    private boolean confirmUserPasswordDB(String email, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + UserDB.TABLE_NAME + " WHERE "
+                + UserDB.COLUMN_EMAIL + " = ? AND "
+                + UserDB.COLUMN_PASSWORD + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{email, password});
+        boolean result = cursor.getCount() > 0;
+        cursor.close();
+        return result;
+    }
+    public boolean editUserPasswordDB(String email, String currentPassword, String newPassword, String confirmPassword) {
+        // Check if the current password is correct
+        if (!confirmUserPasswordDB(email, currentPassword)) return false;
+        // Check if the new password and confirm password match
+        if (!newPassword.equals(confirmPassword)) return false;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(UserDB.COLUMN_PASSWORD, newPassword);
+        int rowsAffected = db.update(UserDB.TABLE_NAME, values, UserDB.COLUMN_EMAIL + " = ? AND " + UserDB.COLUMN_PASSWORD + " = ?", new String[]{email, currentPassword});
+        return rowsAffected > 0;
+    }
+
 }
 

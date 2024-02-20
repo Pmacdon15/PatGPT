@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
@@ -24,9 +25,8 @@ public class ProfileFragment extends Fragment {
     }
     private TextView textviewFirstName;
     private EditText editTextFirstName;
-
     private TextView textviewLastName;
-    private EditText editTextLastName;
+    private EditText editTextLastName, editTextPassword_Current, editTextPassword_New, editTextPassword_Confirm;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,12 +53,18 @@ public class ProfileFragment extends Fragment {
         // Set the edit texts
         editTextFirstName = rootView.findViewById(R.id.editText_First_Name);
         editTextLastName = rootView.findViewById(R.id.editText_Last_Name);
+        editTextPassword_Current = rootView.findViewById(R.id.editTextPassword_Current);
+        editTextPassword_New = rootView.findViewById(R.id.editTextPassword_New);
+        editTextPassword_Confirm = rootView.findViewById(R.id.editTextPassword_Confirm);
 
         // Set on clicks for the buttons
         Button buttonEditFirstName = rootView.findViewById(R.id.button_Edit_First_Name);
         buttonEditFirstName.setOnClickListener(this::editFirstNameProfilePage);
         Button buttonEditLastName = rootView.findViewById(R.id.button_Edit_Last_Name);
         buttonEditLastName.setOnClickListener(this::editLastNameProfilePage);
+        Button buttonEditPassword = rootView.findViewById(R.id.button_Edit_Password);
+        buttonEditPassword.setOnClickListener(this::editPasswordProfilePage);
+
     }
     // Set The Text views
     private void SetFirstNameTextView() {
@@ -106,6 +112,22 @@ public class ProfileFragment extends Fragment {
             }
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
+        }
+    }
+
+    public void editPasswordProfilePage(View view) {
+        Log.d("Maintenance", " Edit Password Button Clicked");
+        String currentPassword = editTextPassword_Current.getText().toString();
+        String newPassword = editTextPassword_New.getText().toString();
+        String confirmPassword = editTextPassword_Confirm.getText().toString();
+        try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
+            if (databaseHelper.editUserPasswordDB(LoginViewModel.profileUsername, currentPassword, newPassword, confirmPassword)) {
+                Log.d("Maintenance", "Password Updated");
+                Toast.makeText(getContext(), "Password Updated", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.d("Maintenance", "Password Not Updated");
+                Toast.makeText(getContext(), "Password Not Updated, Check Input is Correct!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
