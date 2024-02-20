@@ -1,15 +1,23 @@
 package com.example.patgpt.ui;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +31,7 @@ public class ProfileFragment extends Fragment {
     public ProfileFragment() {
         // Required empty public constructor
     }
+    private ImageView imageViewProfile;
     private TextView textviewFirstName;
     private EditText editTextFirstName;
     private TextView textviewLastName;
@@ -44,6 +53,10 @@ public class ProfileFragment extends Fragment {
         return root;
     }
     private void initializeViews(View rootView) {
+        // Set the profile image
+        imageViewProfile = rootView.findViewById(R.id.imageView_Profile);
+        imageViewProfile.setOnClickListener(this::loadImage);
+
         // Set the text views with the current Information
         textviewFirstName = rootView.findViewById(R.id.textView_First_Name);
         textviewLastName = rootView.findViewById(R.id.textView_Last_Name);//
@@ -66,6 +79,23 @@ public class ProfileFragment extends Fragment {
         buttonEditPassword.setOnClickListener(this::editPasswordProfilePage);
 
     }
+    // Set Profile Image
+    public void loadImage(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        imageSelector.launch(intent);
+    }
+
+    private ActivityResultLauncher<Intent> imageSelector = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri imageUri = result.getData().getData();
+                    imageViewProfile.setImageURI(imageUri);
+
+
+                }
+            }
+    );
     // Set The Text views
     private void SetFirstNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
@@ -74,6 +104,7 @@ public class ProfileFragment extends Fragment {
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
+        Toast.makeText(getContext(), "First Name Updated", Toast.LENGTH_SHORT).show();
     }
     private void SetLastNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
@@ -82,6 +113,7 @@ public class ProfileFragment extends Fragment {
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
+        Toast.makeText(getContext(), "Last Name Updated", Toast.LENGTH_SHORT).show();
     }
     // Button Clicks
     public void editFirstNameProfilePage(View view) {
