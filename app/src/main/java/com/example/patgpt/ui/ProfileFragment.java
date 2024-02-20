@@ -2,6 +2,7 @@ package com.example.patgpt.ui;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
 import com.example.patgpt.ui.ui.login.LoginViewModel;
+import com.google.android.material.navigation.NavigationView;
 
 
 public class ProfileFragment extends Fragment {
@@ -84,18 +86,27 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         imageSelector.launch(intent);
     }
-
-    private ActivityResultLauncher<Intent> imageSelector = registerForActivityResult(
+    ActivityResultLauncher<Intent> imageSelector = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Uri imageUri = result.getData().getData();
+                    Activity activity = getActivity();
+                    if (activity != null) {
+                        NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                        if (navigationView != null) {
+                            View headerView = navigationView.getHeaderView(0);
+                            ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
+                            if (imageViewNavHeader != null) {
+                                imageViewNavHeader.setImageURI(imageUri);
+                            }
+                        }
+                    }
                     imageViewProfile.setImageURI(imageUri);
-
-
                 }
             }
     );
+
     // Set The Text views
     private void SetFirstNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
