@@ -3,6 +3,7 @@ package com.example.patgpt.ui.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,6 +78,7 @@ public class HomeFragment extends Fragment {
         if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
         checkForImageFile();
         Log.d("LoginFragment", "onViewCreated");
+        setNavHeaderImage();
         return root;
     }
     @Override
@@ -188,6 +192,25 @@ public class HomeFragment extends Fragment {
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         startActivity(shareIntent);
     }
+
+    public void setNavHeaderImage() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            File file = activity.getFileStreamPath("profileImage.jpg");
+            if (file.exists()) {
+                Uri imageUri = Uri.fromFile(file);
+                NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                if (navigationView != null) {
+                    View headerView = navigationView.getHeaderView(0);
+                    ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
+                    if (imageViewNavHeader != null) {
+                        imageViewNavHeader.setImageURI(imageUri);
+                    }
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onDestroyView() {
