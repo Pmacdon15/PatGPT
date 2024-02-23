@@ -3,7 +3,10 @@ package com.example.patgpt.ui;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,6 +29,9 @@ import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
 import com.example.patgpt.ui.ui.login.LoginViewModel;
 import com.google.android.material.navigation.NavigationView;
+
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 
 public class ProfileFragment extends Fragment {
@@ -102,10 +108,30 @@ public class ProfileFragment extends Fragment {
                             }
                         }
                     }
+                    saveImageLocally(imageUri);
                     imageViewProfile.setImageURI(imageUri);
                 }
             }
     );
+    public void saveImageLocally(Uri imageUri) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            try {
+                InputStream imageStream = activity.getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                FileOutputStream out = activity.openFileOutput("profileImage.jpg", Context.MODE_PRIVATE);
+                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                Log.d("Image", "Image Saved Locally");
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // add this to the file name later LoginViewModel.profileUsername
+
+
 
     // Set The Text views
     private void SetFirstNameTextView() {
@@ -115,7 +141,7 @@ public class ProfileFragment extends Fragment {
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
-        Toast.makeText(getContext(), "First Name Updated", Toast.LENGTH_SHORT).show();
+
     }
     private void SetLastNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
@@ -124,7 +150,7 @@ public class ProfileFragment extends Fragment {
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
-        Toast.makeText(getContext(), "Last Name Updated", Toast.LENGTH_SHORT).show();
+
     }
     // Button Clicks
     public void editFirstNameProfilePage(View view) {
@@ -135,6 +161,7 @@ public class ProfileFragment extends Fragment {
                 Log.d("Maintenance", "First Name Updated");
                 Log.d("newFirstName", newFirstName);
                 textviewFirstName.setText(newFirstName);
+                Toast.makeText(getContext(), "First Name Updated", Toast.LENGTH_SHORT).show();
             } else {
                 Log.d("Maintenance", "First Name Not Updated");
             }
@@ -150,6 +177,7 @@ public class ProfileFragment extends Fragment {
                 Log.d("Maintenance", "Last Name Updated");
                 Log.d("newLastName", newLastName);
                 textviewLastName.setText(newLastName);
+                Toast.makeText(getContext(), "Last Name Updated", Toast.LENGTH_SHORT).show();
             } else {
                 Log.d("Maintenance", "Last Name Not Updated");
             }

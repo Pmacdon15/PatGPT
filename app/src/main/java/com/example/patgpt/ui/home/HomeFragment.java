@@ -1,5 +1,6 @@
 package com.example.patgpt.ui.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -43,6 +45,19 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
    // private String prompt;
 
+    public void checkForImageFile() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            String fileName = "profileImage.jpg";
+            File file = activity.getFileStreamPath(fileName);
+            if (file == null || !file.exists()) {
+                Log.d("File Check", fileName + " does not exist.");
+            } else {
+                Log.d("File Check", fileName + " exists.");
+            }
+        }
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -58,6 +73,8 @@ public class HomeFragment extends Fragment {
         textViewContent.setOnClickListener(this::shareContent);
         // If screen rotates, restore the content of the TextViewContent
         if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
+        checkForImageFile();
+        Log.d("LoginFragment", "onViewCreated");
         return root;
     }
     @Override
