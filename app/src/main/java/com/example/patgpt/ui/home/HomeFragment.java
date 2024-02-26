@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment {
         if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
         checkForImageFile();
         Log.d("LoginFragment", "onViewCreated");
-        //setNavHeaderImage();
+        setNavHeaderImage();
         setNavHeaderUsername();
         return root;
     }
