@@ -119,7 +119,7 @@ public class ProfileFragment extends Fragment {
             try {
                 InputStream imageStream = activity.getContentResolver().openInputStream(imageUri);
                 Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                FileOutputStream out = activity.openFileOutput("profileImage.jpg", Context.MODE_PRIVATE);
+                FileOutputStream out = activity.openFileOutput(LoginViewModel.profileUsername+"profileImage.jpg", Context.MODE_PRIVATE);
                 selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 Log.d("Image", "Image Saved Locally");
                 out.close();

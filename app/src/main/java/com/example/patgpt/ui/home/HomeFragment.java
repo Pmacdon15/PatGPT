@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
+import com.example.patgpt.ui.ui.login.LoginViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -48,18 +49,6 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
    // private String prompt;
 
-    public void checkForImageFile() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            String fileName = "profileImage.jpg";
-            File file = activity.getFileStreamPath(fileName);
-            if (file == null || !file.exists()) {
-                Log.d("File Check", fileName + " does not exist.");
-            } else {
-                Log.d("File Check", fileName + " exists.");
-            }
-        }
-    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -193,10 +182,23 @@ public class HomeFragment extends Fragment {
         startActivity(shareIntent);
     }
 
+    public void checkForImageFile() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            String fileName = LoginViewModel.profileUsername+"profileImage.jpg";
+            File file = activity.getFileStreamPath(fileName);
+            if (file == null || !file.exists()) {
+                Log.d("File Check", fileName + " does not exist.");
+            } else {
+                Log.d("File Check", fileName + " exists.");
+            }
+        }
+    }
+
     public void setNavHeaderImage() {
         Activity activity = getActivity();
         if (activity != null) {
-            File file = activity.getFileStreamPath("profileImage.jpg");
+            File file = activity.getFileStreamPath(LoginViewModel.profileUsername+"profileImage.jpg");
             if (file.exists()) {
                 Uri imageUri = Uri.fromFile(file);
                 NavigationView navigationView = activity.findViewById(R.id.nav_view);
