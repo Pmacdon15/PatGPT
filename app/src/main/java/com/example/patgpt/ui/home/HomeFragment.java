@@ -67,7 +67,8 @@ public class HomeFragment extends Fragment {
         if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
         checkForImageFile();
         Log.d("LoginFragment", "onViewCreated");
-        setNavHeaderImage();
+        //setNavHeaderImage();
+        setNavHeaderUsername();
         return root;
     }
     @Override
@@ -212,6 +213,20 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+    public void setNavHeaderUsername() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+            if (navigationView != null) {
+                View headerView = navigationView.getHeaderView(0);
+                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
+                if (textViewNavHeader != null) {
+                    textViewNavHeader.setText(LoginViewModel.profileUsername);
+                }
+            }
+        }
+    }
+
 
 
     @Override

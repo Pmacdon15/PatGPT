@@ -141,7 +141,6 @@ public class ProfileFragment extends Fragment {
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
-
     }
     private void SetLastNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
@@ -150,7 +149,6 @@ public class ProfileFragment extends Fragment {
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
-
     }
     // Button Clicks
     public void editFirstNameProfilePage(View view) {
