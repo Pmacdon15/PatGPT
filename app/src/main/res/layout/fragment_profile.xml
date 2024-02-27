@@ -14,17 +14,18 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             app:cardCornerRadius="50dp"
+            android:layout_marginTop="16dp"
             app:cardElevation="0dp">
 
             <ImageView
                 android:id="@+id/imageView_Profile"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
                 android:contentDescription="@string/profile_image"
                 app:srcCompat="@drawable/profileimage"
                 tools:ignore="ImageContrastCheck" />

@@ -30,6 +30,7 @@ import com.example.patgpt.R;
 import com.example.patgpt.ui.ui.login.LoginViewModel;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
@@ -64,6 +65,7 @@ public class ProfileFragment extends Fragment {
         // Set the profile image
         imageViewProfile = rootView.findViewById(R.id.imageView_Profile);
         imageViewProfile.setOnClickListener(this::loadImage);
+        setProfileImage();
 
         // Set the text views with the current Information
         textviewFirstName = rootView.findViewById(R.id.textView_First_Name);
@@ -128,11 +130,17 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-
-    // add this to the file name later LoginViewModel.profileUsername
-
-
-
+    // Set The Image view
+    public void setProfileImage() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            File file = activity.getFileStreamPath(LoginViewModel.profileUsername+"profileImage.jpg");
+            if (file.exists()) {
+                Uri imageUri = Uri.fromFile(file);
+                imageViewProfile.setImageURI(imageUri);
+            }
+        }
+    }
     // Set The Text views
     private void SetFirstNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {

@@ -22,7 +22,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="60dp"
         android:layout_marginRight="25dp"
-        android:text="@string/this_app_was_made_as_my_final_project_for_mobile_devlopment_it_uses_the_chat_gpt_api_to_handled_user_queries"
+        android:text="@string/aboutInfo"
         android:textSize="30sp" />
 
 </LinearLayout>
