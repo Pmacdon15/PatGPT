@@ -12,14 +12,24 @@
         android:orientation="vertical"
         tools:context=".ui.ProfileFragment">
 
-        <ImageView
-            android:id="@+id/imageView_Profile"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="0dp">
 
-            android:contentDescription="@string/profile_image"
-            app:srcCompat="@drawable/profileimage"
-            tools:ignore="ImageContrastCheck" />
+            <ImageView
+                android:id="@+id/imageView_Profile"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+
+                android:contentDescription="@string/profile_image"
+                app:srcCompat="@drawable/profileimage"
+                tools:ignore="ImageContrastCheck" />
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/textView_First_Name"
