@@ -16,7 +16,7 @@ This is the final project for my Mobile Dev class. It uses the OpenAi Api to Gen
 - Ability to share generated text
 - Navagation and hamburger menu working as expected
 - SQL Lite database functionality
-- - Ability to change profile picture and other settings and have it reflected in the app specifically the navigation menu
+- Ability to change profile picture and other settings and have it reflected in the app specifically the navigation menu
 ## Coming Soon
 - Ability to share photo instead of link and also ability to save
 - Add history of responses
