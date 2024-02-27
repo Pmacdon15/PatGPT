@@ -13,16 +13,15 @@ This is the final project for my Mobile Dev class. It uses the OpenAi Api to Gen
 - FeaturesCurrently text and image generation are working as expected.
 - Currently you are able to share the link for the image generated.
 - Login screen works at the most basic level
+- Ability to share generated text
 - Navagation and hamburger menu working as expected
 - SQL Lite database functionality
+- - Ability to change profile picture and other settings and have it reflected in the app specifically the navigation menu
 ## Coming Soon
 - Ability to share photo instead of link and also ability to save
-- Ability to share generated text(maybe as a file of some kind)
-- Added prompt above response
-- Added history of responses(potentially while navagating as well
-- Ability to change profile picture and other settings and have it reflected in the app specifically the navigation menu
-
-
+- Add history of responses
+- Add Registration page
+  
 # Setup
 
 1. Make an account and load a balance on the account @ https://platform.openai.com/docs/overview
@@ -50,7 +49,7 @@ admin
 ```
 - Password
 ```
-Admin
+admin
 ```
 
 # Emulators
