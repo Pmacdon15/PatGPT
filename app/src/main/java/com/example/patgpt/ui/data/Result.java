@@ -1,5 +1,7 @@
 package com.example.patgpt.ui.data;
 
+import androidx.annotation.NonNull;
+
 /**
  * A generic class that holds a result success w/ data or an error exception.
  */
@@ -9,12 +11,13 @@ public class Result<T> {
     }
 
     @Override
+    @NonNull
     public String toString() {
-        if (this instanceof Result.Success) {
-            Result.Success success = (Result.Success) this;
+        if (this instanceof Success<?>) {
+            Success<?> success = (Success<?>) this;
             return "Success[data=" + success.getData().toString() + "]";
-        } else if (this instanceof Result.Error) {
-            Result.Error error = (Result.Error) this;
+        } else if (this instanceof Error) {
+            Error error = (Error) this;
             return "Error[exception=" + error.getError().toString() + "]";
         }
         return "";

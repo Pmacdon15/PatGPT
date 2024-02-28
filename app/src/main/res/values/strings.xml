@@ -27,7 +27,7 @@
     <string name="dalle">Dall E</string>
     <string name="about">About</string>
     <string name="profile">Profile</string>
-    <string name="aboutInfo">Welcome to Pat GPT, your AI-powered companion. Leveraging GPT-3.5 Turbo for text and DALL-E 3 for images, Pat GPT transforms your digital interactions. With local data storage via SQLite, your privacy is our priority. Experience the future of AI with Pat GPT.</string>
+    <string name="aboutInfo">Welcome to Pat GPT, your AI-powered companion. Leveraging GPT-3.5 Turbo for text and DALL-E 3 for images, Pat GPT transforms your digital interactions. With local data storage via SQLite, your privacy is our priority. Experience the future of AI with Pat GPT.\n\n\n\n\</string>
     <string name="get_answers">Get Answers</string>
     <string name="get_images">Get a Image</string>
     <string name="menu_dalle">DALL E</string>

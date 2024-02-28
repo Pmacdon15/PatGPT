@@ -3,35 +3,32 @@ package com.example.patgpt.ui.ui.login;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import android.content.Context;
 import android.util.Patterns;
 
-import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
 import com.example.patgpt.ui.data.LoginRepository;
 
+import com.example.patgpt.ui.data.Result;
 import com.example.patgpt.ui.data.model.LoggedInUser;
-//import com.example.patgpt.ui.R;
 
 public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private LoginRepository loginRepository;
-    private DatabaseHelper databaseHelper;
+    private final LoginRepository loginRepository;
+    //private DatabaseHelper databaseHelper;
 
     public static String profileUsername;
 
-    public LoginViewModel(LoginRepository loginRepository, Context context) {
-        this.loginRepository = loginRepository;
-        this.databaseHelper = new DatabaseHelper(context); // Initialize DatabaseHelper
-    }
-
-
-//    LoginViewModel(LoginRepository loginRepository) {
+//    public LoginViewModel(LoginRepository loginRepository, Context context) {
 //        this.loginRepository = loginRepository;
+//        this.databaseHelper = new DatabaseHelper(context); // Initialize DatabaseHelper
 //    }
+
+
+    LoginViewModel(LoginRepository loginRepository) {
+        this.loginRepository = loginRepository;
+    }
 
     LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;
@@ -41,31 +38,32 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
-    //    public void login(String username, String password) {
-//        // can be launched in a separate asynchronous job
-//        Result<LoggedInUser> result = loginRepository.login(username, password);
-//
-//        if (result instanceof Result.Success) {
-//            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-//            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-//        } else {
-//            loginResult.setValue(new LoginResult(R.string.login_failed));
-//        }
-//    }
-    public void login(String username, String password) {
-        boolean isLoggedIn = databaseHelper.checkUser(username, password);
+        public void login(String username, String password) {
+        // can be launched in a separate asynchronous job
+        Result<LoggedInUser> result = loginRepository.login(username, password);
 
-        if (isLoggedIn) {
-            // Login successful
-            LoggedInUser data = new LoggedInUser(java.util.UUID.randomUUID().toString(), username);
+        if (result instanceof Result.Success) {
+            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             profileUsername = username;
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-
         } else {
-            // Login failed
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
     }
+//    public void login(String username, String password) {
+//        boolean isLoggedIn = databaseHelper.checkUser(username, password);
+//
+//        if (isLoggedIn) {
+//            // Login successful
+//            LoggedInUser data = new LoggedInUser(java.util.UUID.randomUUID().toString(), username);
+//            profileUsername = username;
+//            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+//
+//        } else {
+//            // Login failed
+//            loginResult.setValue(new LoginResult(R.string.login_failed));
+//        }
+//    }
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
