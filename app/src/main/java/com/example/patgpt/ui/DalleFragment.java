@@ -78,7 +78,6 @@ public class DalleFragment extends Fragment {
         imageViewContent.setOnClickListener(view -> shareImageFromImageView());
         // If screen rotates, restore the content of the ImageViewContent
         if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
-
         // Inflate the layout for this fragment
         return root;
     }
@@ -93,6 +92,7 @@ public class DalleFragment extends Fragment {
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+
         // Restore the url of the imageViewContent
         if (savedInstanceState != null) {
             url[0] = savedInstanceState.getString("url");
