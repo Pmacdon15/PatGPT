@@ -64,6 +64,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return result;
     }
+    public boolean addUser(String email, String firstName, String lastName, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(UserDB.COLUMN_EMAIL, email);
+        values.put(UserDB.COLUMN_FIRST_NAME, firstName);
+        values.put(UserDB.COLUMN_LAST_NAME, lastName);
+        values.put(UserDB.COLUMN_PASSWORD, password);
+        long newRowId = db.insert(UserDB.TABLE_NAME, null, values);
+        return newRowId != -1;
+    }
     public String getFirstName(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " + UserDB.COLUMN_FIRST_NAME + " FROM " + UserDB.TABLE_NAME + " WHERE "

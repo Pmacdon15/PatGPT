@@ -45,4 +45,6 @@
     <string name="new_password">New Password</string>
     <string name="edit_password">Edit Password</string>
     <string name="menu_register">"Registration "</string>
+    <string name="action_registar">REGISTAR AND SIGN IN</string>
+    <string name="action_register">REGISTER AND SIGN IN</string>
 </resources>

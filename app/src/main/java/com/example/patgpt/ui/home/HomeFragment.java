@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
+import com.example.patgpt.ui.ui.login.LoginFragment;
 import com.example.patgpt.ui.ui.login.LoginViewModel;
 import com.google.android.material.navigation.NavigationView;
 
@@ -221,6 +222,11 @@ public class HomeFragment extends Fragment {
                 View headerView = navigationView.getHeaderView(0);
                 TextView textViewNavHeader = headerView.findViewById(R.id.textView);
                 if (textViewNavHeader != null) {
+                    if (LoginViewModel.profileUsername == null) {
+                        LoginViewModel.profileUsername = LoginFragment.newUserName;
+                        textViewNavHeader.setText(LoginFragment.newUserName);
+                    }
+                    // ELse set the username to the profileUsername
                     textViewNavHeader.setText(LoginViewModel.profileUsername);
                 }
             }
