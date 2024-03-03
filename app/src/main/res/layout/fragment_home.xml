@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".ui.home.HomeFragment">
 
-    <ImageView
-        android:id="@+id/imageView2"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:contentDescription="@string/this_is_the_logo_for_the_app"
-        android:scaleType="fitXY"
-        android:src="@drawable/logo" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.home.HomeFragment">
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout"
-        android:layout_below="@id/imageView2">
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:contentDescription="@string/this_is_the_logo_for_the_app"
+            android:scaleType="fitXY"
+            android:src="@drawable/logo" />
+
+
         <TextView
             android:id="@+id/textView_Content"
             android:layout_width="match_parent"
@@ -26,36 +29,40 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="40dp"
             android:layout_marginRight="30dp" />
-    </ScrollView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/editText_Prompt"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/get_answers"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:minHeight="48dp"
-            tools:ignore="LabelFor" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/button_Send"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:text="@string/send"
-            android:textColor="#000000" />
+            <EditText
+                android:id="@+id/editText_Prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/get_answers"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:minHeight="48dp"
+                tools:ignore="LabelFor" />
+
+            <Button
+                android:id="@+id/button_Send"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="@string/send"
+                android:textColor="#000000" />
+        </LinearLayout>
+
     </LinearLayout>
-
-</RelativeLayout>
+</ScrollView>

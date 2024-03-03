@@ -143,7 +143,7 @@ public class HomeFragment extends Fragment {
                             .getJSONObject("message")
                             .getString("content");
                     // Trailing line breaks for better functionality when scrolling the screen
-                    String output = prompt+ ":\n \n \n" + content + "\n \n \n \n \n";
+                    String output = prompt+ ":\n \n \n" + content ;
 
                     requireActivity().runOnUiThread(() -> {
                         closeKeyboard(requireContext(), editTextPrompt);
