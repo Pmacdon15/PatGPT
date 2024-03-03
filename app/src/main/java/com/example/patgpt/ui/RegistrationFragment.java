@@ -11,12 +11,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.patgpt.R;
 
-public class FragmentRegistration extends Fragment {
+public class RegistrationFragment extends Fragment {
 
     private Button registerButton;
     private EditText firstname, lastname, password, confirm_password;
 
-    public FragmentRegistration() {
+    public RegistrationFragment() {
         // Required empty public constructor
     }
 
