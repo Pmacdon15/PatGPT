@@ -50,4 +50,7 @@
     <string name="clear">Clear</string>
     <string name="history">History</string>
     <string name="action_sign_in_with_google">SIGN IN WITH GOOGLE</string>
+    <string name="logout">Logout</string>
+    <string name="menu_logout">Logout</string>
+    <string name="logging_out">Loging Out ...</string>
 </resources>

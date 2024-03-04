@@ -16,7 +16,6 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private final LoginRepository loginRepository;
-    //private DatabaseHelper databaseHelper;
 
     public static String profileUsername;
 

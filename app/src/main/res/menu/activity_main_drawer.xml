@@ -30,7 +30,9 @@
             android:icon="@drawable/about"
             android:title="@string/about" />
         <!--        image from  href="https://www.flaticon.com/free-icons" -->
-
+        <item
+            android:id="@+id/nav_logout"
+            android:title="@string/logout" />
 <!--        <item-->
 <!--            android:id="@+id/nav_gallery"-->
 <!--            android:icon="@drawable/ic_menu_gallery"-->

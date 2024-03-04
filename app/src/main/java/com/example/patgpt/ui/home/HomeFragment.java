@@ -230,6 +230,11 @@ public class HomeFragment extends Fragment {
         Activity activity = getActivity();
         if (activity != null) {
             String fileName = LoginViewModel.profileUsername + "profileImage.jpg";
+            if (fileName.equals("profileImage.jpg")) {
+                // Do not load the image this is from Earlier iterations before loginViewModel.profileUsername was implemented
+                Log.d("File Check", "No profile image to load");
+                return false;
+            }
             File file = activity.getFileStreamPath(fileName);
             if (file == null || !file.exists()) {
                 Log.d("File Check", fileName + " does not exist.");
@@ -267,22 +272,16 @@ public class HomeFragment extends Fragment {
                 View headerView = navigationView.getHeaderView(0);
                 TextView textViewNavHeader = headerView.findViewById(R.id.textView);
                 if (textViewNavHeader != null) {
-                    if (LoginViewModel.profileUsername == null) {
-                        LoginViewModel.profileUsername = LoginFragment.newUserName;
-                        textViewNavHeader.setText(LoginFragment.newUserName);
+                    if (LoginFragment.LoggedInUser == null) {
+                        LoginFragment.LoggedInUser = LoginFragment.newUserName;
                     }
                     // ELse set the username to the profileUsername
-                    textViewNavHeader.setText(LoginViewModel.profileUsername);
+                    textViewNavHeader.setText(LoginFragment.LoggedInUser);
                 }
             }
         }
     }
 
-    public void signInWithGoogle() {
-        LoginViewModel.profileUsername = "";
-        NavController navController = Navigation.findNavController(requireView());
-        navController.navigate(R.id.nav_login);
-    }
 
     @Override
     public void onDestroyView() {
