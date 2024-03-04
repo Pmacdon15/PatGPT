@@ -82,6 +82,7 @@ public class HomeFragment extends Fragment {
         if (account != null) {
             Log.d("GoogleSignIn", "User is signed in");
             LoginViewModel.profileUsername = account.getEmail();
+            Log.d("GoogleSignIn", "Username: " + LoginViewModel.profileUsername);
             imageUrl = Objects.requireNonNull(account.getPhotoUrl()).toString();
         } else {
             Log.d("GoogleSignIn", "User is not signed in");

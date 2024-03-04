@@ -1,5 +1,7 @@
 package com.example.patgpt.ui.ui.login;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -34,8 +37,7 @@ import com.google.android.gms.tasks.Task;
 //import com.example.patgpt.ui.ui.login.LoginViewModel;
 
 public class LoginFragment extends Fragment {
-    private GoogleSignInOptions gso;
-    private GoogleSignInClient gsc;
+//    private GoogleSignInClient gsc;
     private LoginViewModel loginViewModel;
     private FragmentLoginBinding binding;
     private DatabaseHelper databaseHelper;
@@ -62,11 +64,15 @@ public class LoginFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         binding = FragmentLoginBinding.inflate(inflater, container, false);
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        gsc = GoogleSignIn.getClient(requireContext(), gso);
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestEmail()
+//                .build();
+//        gsc = GoogleSignIn.getClient(requireContext(), gso);
 
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
+//        if (account != null) {
+//            navigateToHome();
+//        }
         return binding.getRoot();
 
     }
@@ -84,9 +90,7 @@ public class LoginFragment extends Fragment {
         final ProgressBar loadingProgressBar = binding.loading;
 
         final Button signInWithGoogle = view.findViewById(R.id.login_with_google);
-        signInWithGoogle.setOnClickListener(v -> {
-            signInWithGoogle();
-        });
+        signInWithGoogle.setOnClickListener(v -> signInWithGoogle());
 
         loginViewModel.getLoginFormState().observe(getViewLifecycleOwner(), loginFormState -> {
             if (loginFormState == null) {
@@ -173,28 +177,34 @@ public class LoginFragment extends Fragment {
     }
 
     public void signInWithGoogle() {
-        Intent signInIntent = gsc.getSignInIntent();
-        startActivityForResult(signInIntent, 101);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient signInClient = GoogleSignIn.getClient(requireContext(), gso);
+        Intent signInIntent = signInClient.getSignInIntent();
+        signInLauncher.launch(signInIntent); // Launch the sign-in activity
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 101) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                    try {
+                        GoogleSignInAccount account = task.getResult(ApiException.class);
 
-            try {
-                task.getResult(ApiException.class);
-                navigateToHome();
-            } catch (ApiException e) {
-                Toast.makeText(getContext(), "Google sign in failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Google sign-in successful", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(requireView()).navigate(R.id.nav_home);
+                    } catch (ApiException e) {
+                        // Handle sign-in failure (e.g., show error message)
+                        Toast.makeText(getContext(), "Google sign-in failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
+    );
 
-
-        }
-    }
 
     @Override
     public void onDestroyView() {
