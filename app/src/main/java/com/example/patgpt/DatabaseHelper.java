@@ -172,5 +172,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return historyCursor;
     }
 
+    public boolean addHistoryForUser(String email, String result) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Querying UserDB to get userId based on email
+        Cursor userCursor = db.query(UserDB.TABLE_NAME, new String[]{UserDB.COLUMN_USER_ID}, UserDB.COLUMN_EMAIL + "=?", new String[]{email}, null, null, null);
+        int userId = -1; // Default value if user is not found
+        if (userCursor.moveToFirst()) {
+            int columnIndex = userCursor.getColumnIndex(UserDB.COLUMN_USER_ID);
+            if (columnIndex != -1) {
+                userId = userCursor.getInt(columnIndex);
+            }
+        }
+        userCursor.close();
+
+        // Inserting into History table
+        ContentValues values = new ContentValues();
+        values.put(HistoryDB.COLUMN_USER_ID, userId);
+        values.put(HistoryDB.COLUMN_RESULT, result);
+        long newRowId = db.insert(HistoryDB.TABLE_NAME, null, values);
+        return newRowId != -1;
+    }
 }
 

@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 //import androidx.lifecycle.ViewModelProvider;
 
+import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
 import com.example.patgpt.ui.ui.login.LoginFragment;
@@ -48,7 +49,7 @@ public class HomeFragment extends Fragment {
     private TextView textViewContent;
     private EditText editTextPrompt;
     private FragmentHomeBinding binding;
-   // private String prompt;
+    // private String prompt;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -72,11 +73,13 @@ public class HomeFragment extends Fragment {
         setNavHeaderUsername();
         return root;
     }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("savedContent", textViewContent.getText().toString());
     }
+
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -111,7 +114,6 @@ public class HomeFragment extends Fragment {
             JSONArray messages = new JSONArray();
             JSONObject message = new JSONObject();
             message.put("role", "user");
-//            HomeViewModel inputText;
             message.put("content", editTextPrompt.getText().toString());
             messages.put(message);
             jsonBody.put("messages", messages);
@@ -144,7 +146,9 @@ public class HomeFragment extends Fragment {
                             .getJSONObject("message")
                             .getString("content");
                     // Trailing line breaks for better functionality when scrolling the screen
-                    String output = prompt+ ":\n \n \n" + content ;
+                    String output = prompt + ":\n \n \n" + content;
+                    // Save the content to the database
+                    saveHistory(output);
 
                     requireActivity().runOnUiThread(() -> {
                         closeKeyboard(requireContext(), editTextPrompt);
@@ -184,10 +188,21 @@ public class HomeFragment extends Fragment {
         startActivity(shareIntent);
     }
 
+    public void saveHistory(String content) {
+        try (DatabaseHelper databaseHelper = new DatabaseHelper(getActivity())) {
+            if (databaseHelper.addHistoryForUser(LoginViewModel.profileUsername, content)) {
+                Log.d("HistoryFragment", "History added successfully");
+            }
+            // Else log an error message
+            Log.e("HistoryFragment", "Failed to add history");
+
+        }
+    }
+
     public void checkForImageFile() {
         Activity activity = getActivity();
         if (activity != null) {
-            String fileName = LoginViewModel.profileUsername+"profileImage.jpg";
+            String fileName = LoginViewModel.profileUsername + "profileImage.jpg";
             File file = activity.getFileStreamPath(fileName);
             if (file == null || !file.exists()) {
                 Log.d("File Check", fileName + " does not exist.");
@@ -200,7 +215,7 @@ public class HomeFragment extends Fragment {
     public void setNavHeaderImage() {
         Activity activity = getActivity();
         if (activity != null) {
-            File file = activity.getFileStreamPath(LoginViewModel.profileUsername+"profileImage.jpg");
+            File file = activity.getFileStreamPath(LoginViewModel.profileUsername + "profileImage.jpg");
             if (file.exists()) {
                 Uri imageUri = Uri.fromFile(file);
                 NavigationView navigationView = activity.findViewById(R.id.nav_view);
@@ -214,6 +229,7 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+
     public void setNavHeaderUsername() {
         Activity activity = getActivity();
         if (activity != null) {
@@ -232,7 +248,6 @@ public class HomeFragment extends Fragment {
             }
         }
     }
-
 
 
     @Override
