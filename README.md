@@ -3,6 +3,8 @@ This project is the final assignment for my Mobile Development class. It leverag
 
 ## Table of Contents
 - [Features](#Features)
+  - [Current Features](#Current-Features)
+  - [Coming Soon](#Coming-Soon)
 - [Setup](#Setup)
 - [Emulators](#Emulators)
 - [Acknowledgments](#Acknowledgments)
