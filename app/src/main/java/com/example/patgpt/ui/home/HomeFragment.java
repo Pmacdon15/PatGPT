@@ -18,6 +18,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 //import androidx.lifecycle.ViewModelProvider;
 
 import com.example.patgpt.DatabaseHelper;
@@ -25,6 +27,10 @@ import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
 import com.example.patgpt.ui.ui.login.LoginFragment;
 import com.example.patgpt.ui.ui.login.LoginViewModel;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -33,6 +39,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -49,7 +56,11 @@ public class HomeFragment extends Fragment {
     private TextView textViewContent;
     private EditText editTextPrompt;
     private FragmentHomeBinding binding;
-    // private String prompt;
+    private GoogleSignInOptions gso;
+    private GoogleSignInClient gsc;
+
+    private Uri imageUri;
+    private String imageUrl;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -62,14 +73,29 @@ public class HomeFragment extends Fragment {
         textViewContent = root.findViewById(R.id.textView_Content);
         editTextPrompt = root.findViewById(R.id.editText_Prompt);
 
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        gsc = GoogleSignIn.getClient(requireContext(), gso);
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
+        if (account != null) {
+            Log.d("GoogleSignIn", "User is signed in");
+            LoginViewModel.profileUsername = account.getEmail();
+            imageUrl = Objects.requireNonNull(account.getPhotoUrl()).toString();
+        } else {
+            Log.d("GoogleSignIn", "User is not signed in");
+        }
 
         buttonSend.setOnClickListener(view -> makeApiRequest());
         textViewContent.setOnClickListener(this::shareContent);
         // If screen rotates, restore the content of the TextViewContent
-        if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
-        checkForImageFile();
+        //if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
+        if(checkForImageFile()) {
+            setNavHeaderImage();
+        }
         Log.d("LoginFragment", "onViewCreated");
-        setNavHeaderImage();
+
         setNavHeaderUsername();
         return root;
     }
@@ -199,7 +225,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public void checkForImageFile() {
+    public boolean checkForImageFile() {
         Activity activity = getActivity();
         if (activity != null) {
             String fileName = LoginViewModel.profileUsername + "profileImage.jpg";
@@ -208,8 +234,10 @@ public class HomeFragment extends Fragment {
                 Log.d("File Check", fileName + " does not exist.");
             } else {
                 Log.d("File Check", fileName + " exists.");
+                return true;
             }
         }
+        return false;
     }
 
     public void setNavHeaderImage() {
@@ -249,6 +277,11 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    public void signInWithGoogle() {
+        LoginViewModel.profileUsername = "";
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(R.id.nav_login);
+    }
 
     @Override
     public void onDestroyView() {

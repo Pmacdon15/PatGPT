@@ -49,4 +49,5 @@
     <string name="action_register">REGISTER AND SIGN IN</string>
     <string name="clear">Clear</string>
     <string name="history">History</string>
+    <string name="action_sign_in_with_google">SIGN IN WITH GOOGLE</string>
 </resources>
