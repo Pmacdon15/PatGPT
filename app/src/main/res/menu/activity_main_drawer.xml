@@ -13,22 +13,23 @@
             android:id="@+id/nav_dalle"
             android:icon="@drawable/dalle"
             android:title="@string/dalle" />
-        <!--        image from  href="https://www.flaticon.com/free-icons/house" -->
+        <!--        image from  href="https://www.flaticon.com/free-icons/" -->
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/profile"
             android:title="@string/profile" />
-        <!--        image from  href="https://www.flaticon.com/free-icons/house" -->
+        <!--        image from  href="https://www.flaticon.com/free-icons/" -->
         <item
             android:id="@+id/nav_history"
-            android:title="@string/history" />
-        <!--        image from  href="https://www.flaticon.com/free-icons/house" -->
+            android:title="@string/history"
+            android:icon="@drawable/history"/>
+        <!--        image from  href="https://www.flaticon.com/free-icons/" -->
 
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/about"
             android:title="@string/about" />
-        <!--        image from  href="https://www.flaticon.com/free-icons/house" -->
+        <!--        image from  href="https://www.flaticon.com/free-icons" -->
 
 <!--        <item-->
 <!--            android:id="@+id/nav_gallery"-->
