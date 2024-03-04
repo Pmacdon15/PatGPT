@@ -7,10 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-
     // Database Version
     private static final int DATABASE_VERSION = 3;
-
     // Database Name
     private static final String DATABASE_NAME = "AppDBManager.db";
 
@@ -148,6 +146,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(UserDB.COLUMN_PASSWORD, newPassword);
         int rowsAffected = db.update(UserDB.TABLE_NAME, values, UserDB.COLUMN_EMAIL + " = ? AND " + UserDB.COLUMN_PASSWORD + " = ?", new String[]{email, currentPassword});
         return rowsAffected > 0;
+    }
+
+    public Cursor getHistoryForUser(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Querying UserDB to get userId based on email
+        Cursor userCursor = db.query(UserDB.TABLE_NAME, new String[]{UserDB.COLUMN_USER_ID}, UserDB.COLUMN_EMAIL + "=?", new String[]{email}, null, null, null);
+        int userId = -1; // Default value if user is not found
+        if (userCursor.moveToFirst()) {
+            int columnIndex = userCursor.getColumnIndex(UserDB.COLUMN_USER_ID);
+            if (columnIndex != -1) {
+                userId = userCursor.getInt(columnIndex);
+            }
+        }
+        userCursor.close();
+
+        // Querying History table based on userId
+        Cursor historyCursor = null;
+        if (userId != -1) {
+            historyCursor = db.query(HistoryDB.TABLE_NAME, null, HistoryDB.COLUMN_USER_ID + "=?", new String[]{String.valueOf(userId)}, null, null, null);
+        }
+
+        // You can return the cursor here, and handle it accordingly in the calling code
+        return historyCursor;
     }
 
 }

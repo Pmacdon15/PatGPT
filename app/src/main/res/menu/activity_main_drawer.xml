@@ -20,6 +20,11 @@
             android:title="@string/profile" />
         <!--        image from  href="https://www.flaticon.com/free-icons/house" -->
         <item
+            android:id="@+id/nav_history"
+            android:title="@string/history" />
+        <!--        image from  href="https://www.flaticon.com/free-icons/house" -->
+
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/about"
             android:title="@string/about" />
