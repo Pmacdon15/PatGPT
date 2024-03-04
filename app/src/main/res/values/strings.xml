@@ -47,4 +47,5 @@
     <string name="menu_register">"Registration "</string>
     <string name="action_registar">REGISTAR AND SIGN IN</string>
     <string name="action_register">REGISTER AND SIGN IN</string>
+    <string name="clear">Clear</string>
 </resources>

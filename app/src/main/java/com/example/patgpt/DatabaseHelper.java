@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     private static final String DATABASE_NAME = "AppDBManager.db";
@@ -23,8 +23,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // create users table
         db.execSQL(UserDB.CREATE_TABLE);
-        // Create tables
-
         // Insert data into the database
         ContentValues values = new ContentValues();
         values.put(UserDB.COLUMN_EMAIL, "admin");
@@ -32,12 +30,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(UserDB.COLUMN_LAST_NAME, "Admin");
         values.put(UserDB.COLUMN_PASSWORD, "admin");
         db.insert(UserDB.TABLE_NAME, null, values);
+
+        // Create History table
+        db.execSQL(HistoryDB.CREATE_TABLE);
+        // Insert data into the history table
+        ContentValues historyValues = new ContentValues();
+        historyValues.put(HistoryDB.COLUMN_USER_ID, 1);
+        historyValues.put(HistoryDB.COLUMN_RESULT, "This is a sample result");
+        db.insert(HistoryDB.TABLE_NAME, null, historyValues);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + UserDB.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + HistoryDB.TABLE_NAME);
 
         // Create tables again
         onCreate(db);

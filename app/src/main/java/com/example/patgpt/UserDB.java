@@ -8,9 +8,7 @@ public class UserDB {
     private String lastName;
     private String password;
     // Table Name
-    public static final String TABLE_NAME = "users";
-
-    // Column Names
+    public static final String TABLE_NAME = "users";    // Column Names
     public static final String COLUMN_USER_ID = "userId";
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_FIRST_NAME = "firstName";
