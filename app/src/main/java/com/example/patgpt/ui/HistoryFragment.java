@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -19,6 +20,7 @@ public class HistoryFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     private String UserEmail;
     private TextView textViewContent;
+    private Button clearHistoryButton;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -32,13 +34,17 @@ public class HistoryFragment extends Fragment {
         databaseHelper = new DatabaseHelper(getActivity());
         UserEmail = LoginViewModel.profileUsername;
         textViewContent.setText(loadHistoryForUser());
+        assignButton(view);
+        clearHistoryButton.setOnClickListener(v -> clearHistory());
         return view;
     }
 
     public void assignViews(View view) {
         textViewContent = view.findViewById(R.id.textView_Content);
     }
-
+    public void assignButton(View view) {
+        clearHistoryButton = view.findViewById(R.id.button_Clear);
+    }
     public String loadHistoryForUser() {
         Cursor cursor = databaseHelper.getHistoryForUser(UserEmail);
         StringBuilder historyContentBuilder = new StringBuilder();
@@ -71,6 +77,14 @@ public class HistoryFragment extends Fragment {
             Log.e("HistoryFragment", "Cursor is null");
         }
         return historyContentBuilder.toString();
+    }
+
+    public void clearHistory() {
+        // Clear history for the current user
+        boolean isHistoryCleared = databaseHelper. deleteHistoryForUser(UserEmail);
+        if (isHistoryCleared) {
+            textViewContent.setText("");
+        }
     }
 
 
