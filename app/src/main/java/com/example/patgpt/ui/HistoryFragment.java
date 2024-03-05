@@ -14,11 +14,12 @@ import androidx.fragment.app.Fragment;
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.HistoryDB;
 import com.example.patgpt.R;
+import com.example.patgpt.UserData;
 import com.example.patgpt.ui.ui.login.LoginFragment;
 
 public class HistoryFragment extends Fragment {
     private DatabaseHelper databaseHelper;
-    private String UserEmail;
+    private String LoggedInUser;
     private TextView textViewContent;
     private Button clearHistoryButton;
 
@@ -33,11 +34,20 @@ public class HistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         assignViews(view); // Call assignViews() before accessing textViewContent
         databaseHelper = new DatabaseHelper(getActivity());
-        UserEmail = loadUserEmail();
+        LoggedInUser = UserData.loadUserEmail(requireContext());
         textViewContent.setText(loadHistoryForUser());
         assignButton(view);
         clearHistoryButton.setOnClickListener(v -> clearHistory());
         return view;
+    }
+
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        LoggedInUser = UserData.loadUserEmail(requireContext());
+        UserData.setNavHeaderUsername(getActivity(), LoggedInUser);
+        if(!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())){
+            UserData.setNavHeaderGoogleImage(getActivity());
+        }
     }
 
     public void assignViews(View view) {
@@ -49,11 +59,11 @@ public class HistoryFragment extends Fragment {
     }
 
     public String loadHistoryForUser() {
-        Cursor cursor = databaseHelper.getHistoryForUser(UserEmail);
+        Cursor cursor = databaseHelper.getHistoryForUser(LoggedInUser);
 
         StringBuilder historyContentBuilder = new StringBuilder();
         if (cursor == null || cursor.getCount() == 0) { // Check if cursor is null or empty
-            cursor = databaseHelper.getHistoryForGoogleUser(UserEmail); // Fallback to Google user history
+            cursor = databaseHelper.getHistoryForGoogleUser(LoggedInUser); // Fallback to Google user history
         }
 
         if (cursor != null) {
@@ -82,21 +92,21 @@ public class HistoryFragment extends Fragment {
 
     public void clearHistory() {
         // Clear history for the current user
-        boolean isHistoryCleared = databaseHelper.deleteHistoryForUser(UserEmail);
+        boolean isHistoryCleared = databaseHelper.deleteHistoryForUser(LoggedInUser);
         if (!isHistoryCleared) {
-            isHistoryCleared = databaseHelper.deleteHistoryForGoogleUser(UserEmail);
+            isHistoryCleared = databaseHelper.deleteHistoryForGoogleUser(LoggedInUser);
         }
 
         if (isHistoryCleared) {
             textViewContent.setText("");
         }
     }
-    private String loadUserEmail() {
-        if (getContext() != null) {
-            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
-        }
-        return "";
-    }
+//    private String loadUserEmail() {
+//        if (getContext() != null) {
+//            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
+//        }
+//        return "";
+//    }
 
 
 }

@@ -27,12 +27,13 @@ import android.widget.Toast;
 
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
-import com.example.patgpt.ui.ui.login.LoginFragment;
+import com.example.patgpt.UserData;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+
 
 
 public class ProfileFragment extends Fragment {
@@ -59,18 +60,25 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         initializeViews(root);
-        LoggedInUser = loadUserEmail();
-        Log.d("LoggedInUser", LoggedInUser);
+        LoggedInUser = UserData.loadUserEmail(requireContext());
+        Log.d("ProfileFragment","LoggedInUser "+ LoggedInUser);
+
         return root;
     }
-
-
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        LoggedInUser = UserData.loadUserEmail(requireContext());
+        UserData.setNavHeaderUsername(getActivity(), LoggedInUser);
+        if(!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())){
+            UserData.setNavHeaderGoogleImage(getActivity());
+        }
+    }
 
     private void initializeViews(View rootView) {
         // Set the profile image
         imageViewProfile = rootView.findViewById(R.id.imageView_Profile);
-        imageViewProfile.setOnClickListener(this::loadImage);
-        setProfileImage();
+        imageViewProfile.setOnClickListener(this::loadImageToProfile);
 
         // Set the text views with the current Information
         textviewFirstName = rootView.findViewById(R.id.textView_First_Name);
@@ -96,7 +104,7 @@ public class ProfileFragment extends Fragment {
     }
 
     // Set Profile Image
-    public void loadImage(View view) {
+    public void loadImageToProfile(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         imageSelector.launch(intent);
     }
@@ -140,16 +148,16 @@ public class ProfileFragment extends Fragment {
     }
 
     // Set The Image view
-    public void setProfileImage() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            File file = activity.getFileStreamPath(LoggedInUser + "profileImage.jpg");
-            if (file.exists()) {
-                Uri imageUri = Uri.fromFile(file);
-                imageViewProfile.setImageURI(imageUri);
-            }
-        }
-    }
+//    public void setProfileImage() {
+//        Activity activity = getActivity();
+//        if (activity != null) {
+//            File file = activity.getFileStreamPath(LoggedInUser + "profileImage.jpg");
+//            if (file.exists()) {
+//                Uri imageUri = Uri.fromFile(file);
+//                imageViewProfile.setImageURI(imageUri);
+//            }
+//        }
+//    }
 
     // Set The Text views
     private void SetFirstNameTextView() {
@@ -221,12 +229,12 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-    private String loadUserEmail() {
-        if (getContext() != null) {
-            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
-        }
-        return "";
-    }
+//    private String loadUserEmail() {
+//        if (getContext() != null) {
+//            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
+//        }
+//        return "";
+//    }
 
     @Override
     public void onDestroy() {
