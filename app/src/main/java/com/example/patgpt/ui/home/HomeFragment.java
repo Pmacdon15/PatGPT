@@ -25,6 +25,7 @@ import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
 import com.example.patgpt.ui.ui.login.LoginFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +49,6 @@ public class HomeFragment extends Fragment {
     private TextView textViewContent;
     private EditText editTextPrompt;
     private FragmentHomeBinding binding;
-    private Uri imageUri;
     private String LoggedInUser;
 
 
@@ -66,9 +66,12 @@ public class HomeFragment extends Fragment {
         textViewContent.setOnClickListener(this::shareContent);
         // If screen rotates, restore the content of the TextViewContent
         //if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
-        if(checkForImageFile()) {
-            setNavHeaderImage();
-        }
+
+        setNavHeaderUsername();
+        setNavHeaderImage();
+        setNavHeaderGoogleImage();
+
+
 
         LoggedInUser = loadUserEmail();
         Log.d("HomeFragment", "onCreateView: " + LoggedInUser);
@@ -90,12 +93,14 @@ public class HomeFragment extends Fragment {
             textViewContent.setText(savedContent);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        if(checkForImageFile()) {
+        if (checkForImageFile()) {
             setNavHeaderImage();
         }
+        setNavHeaderGoogleImage();
         setNavHeaderUsername();
     }
 
@@ -249,6 +254,32 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+
+    private String loadProfileImage() {
+        if (getContext() != null) {
+            return getContext().getSharedPreferences("LoggedInUserProfileImage", 0).getString("profileImage", "");
+        }
+        return "";
+    }
+
+    // Set navHeader to user's profile image using Picasso and loadProfileImage()
+    private void setNavHeaderGoogleImage() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            String profileImageUrl = loadProfileImage();
+            if (!profileImageUrl.isEmpty()) {
+                NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                if (navigationView != null) {
+                    View headerView = navigationView.getHeaderView(0);
+                    ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
+                    if (imageViewNavHeader != null) {
+                        Picasso.get().load(profileImageUrl).into(imageViewNavHeader);
+                    }
+                }
+            }
+        }
+    }
+
     // Set navHeader to user's name
     public void setNavHeaderUsername() {
         Activity activity = getActivity();
@@ -260,7 +291,7 @@ public class HomeFragment extends Fragment {
                 if (textViewNavHeader != null) {
                     textViewNavHeader.setText(LoggedInUser);
                 }
-            }else {
+            } else {
                 Log.d("HomeFragment", "navigationView is null");
             }
         }
@@ -273,6 +304,7 @@ public class HomeFragment extends Fragment {
         }
         return "";
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

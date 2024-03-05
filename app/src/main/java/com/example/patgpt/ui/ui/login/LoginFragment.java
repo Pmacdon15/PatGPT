@@ -24,7 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.example.patgpt.DatabaseHelper;
@@ -36,7 +36,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 
 
 
@@ -109,13 +108,11 @@ public class LoginFragment extends Fragment {
         });
 
     }
-
     public void signIn(String username, String password) {
         // check if you can remove nesting with return later
         if (databaseHelper.checkUser(username, password)) {
             LoggedInUser = username;
             saveUserEmail(LoggedInUser);
-            setNavHeaderUsername();
             navigateToHome();
         } else {
             showLoginFailed(R.string.login_failed);
@@ -126,7 +123,6 @@ public class LoginFragment extends Fragment {
 
         }
     }
-
     // For the login button, check the login result and navigate to HomeFragment
     private void navigateToHome() {
         // If login is successful, navigate to HomeFragment
@@ -167,7 +163,6 @@ public class LoginFragment extends Fragment {
                         LoggedInUser = account.getEmail();
                         saveUserEmail(LoggedInUser);
                         saveProfileImage(account.getPhotoUrl());
-                        setNavHeaderUsername();
                         Navigation.findNavController(requireView()).navigate(R.id.nav_home);
                     } catch (ApiException e) {
                         // Handle sign-in failure (e.g., show error message)
@@ -197,30 +192,47 @@ public class LoginFragment extends Fragment {
         return "";
     }
     // Load uri for profile image from SharedPreferences
-    private String loadProfileImage() {
-        if (getContext() != null) {
-            return getContext().getSharedPreferences("LoggedInUserProfileImage", 0).getString("profileImage", "");
-        }
-        return "";
-    }
-    // Set navHeader to user's profile image
-
-
-    public void setNavHeaderUsername() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            NavigationView navigationView = activity.findViewById(R.id.nav_view);
-            if (navigationView != null) {
-                View headerView = navigationView.getHeaderView(0);
-                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
-                if (textViewNavHeader != null) {
-                    textViewNavHeader.setText(LoggedInUser);
-                }
-            }else {
-                Log.d("LoginFragment", "navigationView is null");
-            }
-        }
-    }
+//    private String loadProfileImage() {
+//        if (getContext() != null) {
+//            return getContext().getSharedPreferences("LoggedInUserProfileImage", 0).getString("profileImage", "");
+//        }
+//        return "";
+//    }
+//    // Set navHeader to user's profile image using Picasso and loadProfileImage()
+//    private void setNavHeaderImage() {
+//        Activity activity = getActivity();
+//        if (activity != null) {
+//            String profileImageUrl = loadProfileImage();
+//            if (!profileImageUrl.isEmpty()) {
+//                NavigationView navigationView = activity.findViewById(R.id.nav_view);
+//                if (navigationView != null) {
+//                    View headerView = navigationView.getHeaderView(0);
+//                    ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
+//                    if (imageViewNavHeader != null) {
+//                        Picasso.get().load(profileImageUrl).into(imageViewNavHeader);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//
+//
+//    public void setNavHeaderUsername() {
+//        Activity activity = getActivity();
+//        if (activity != null) {
+//            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+//            if (navigationView != null) {
+//                View headerView = navigationView.getHeaderView(0);
+//                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
+//                if (textViewNavHeader != null) {
+//                    textViewNavHeader.setText(LoggedInUser);
+//                }
+//            }else {
+//                Log.d("LoginFragment", "navigationView is null");
+//            }
+//        }
+//    }
 
     @Override
     public void onDestroyView() {
