@@ -1,7 +1,7 @@
 package com.example.patgpt;
 
 import android.app.Activity;
-import android.net.Uri;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.File;
 
 
 public class Logout extends Fragment {
