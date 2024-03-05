@@ -191,49 +191,6 @@ public class LoginFragment extends Fragment {
         }
         return "";
     }
-    // Load uri for profile image from SharedPreferences
-//    private String loadProfileImage() {
-//        if (getContext() != null) {
-//            return getContext().getSharedPreferences("LoggedInUserProfileImage", 0).getString("profileImage", "");
-//        }
-//        return "";
-//    }
-//    // Set navHeader to user's profile image using Picasso and loadProfileImage()
-//    private void setNavHeaderImage() {
-//        Activity activity = getActivity();
-//        if (activity != null) {
-//            String profileImageUrl = loadProfileImage();
-//            if (!profileImageUrl.isEmpty()) {
-//                NavigationView navigationView = activity.findViewById(R.id.nav_view);
-//                if (navigationView != null) {
-//                    View headerView = navigationView.getHeaderView(0);
-//                    ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
-//                    if (imageViewNavHeader != null) {
-//                        Picasso.get().load(profileImageUrl).into(imageViewNavHeader);
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//
-//
-//    public void setNavHeaderUsername() {
-//        Activity activity = getActivity();
-//        if (activity != null) {
-//            NavigationView navigationView = activity.findViewById(R.id.nav_view);
-//            if (navigationView != null) {
-//                View headerView = navigationView.getHeaderView(0);
-//                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
-//                if (textViewNavHeader != null) {
-//                    textViewNavHeader.setText(LoggedInUser);
-//                }
-//            }else {
-//                Log.d("LoginFragment", "navigationView is null");
-//            }
-//        }
-//    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
