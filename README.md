@@ -20,13 +20,14 @@ This project is the final assignment for my Mobile Development class. It leverag
 - Navigation and Hamburger Menu: Provides easy navigation throughout the app.
 - SQLite Database Functionality: Stores user data and history locally.
 - Profile Settings: Users can change profile picture and other settings, which are reflected in the app, particularly in the navigation menu.
-
+- Google Account Login: Option to log in using Google accounts
+- 
 > **Note**
 > Some additional features have been implemented but will be available in the next release.
 
 ## Coming Soon
 - History Sharing: Users will be able to share their history.
-- Google Account Login: Option to log in using Google accounts.
+. Local Users, will be able to stay logged in even if we close the app.
   
 # Setup
 
@@ -46,7 +47,9 @@ This project is the final assignment for my Mobile Development class. It leverag
 ```
 5. Replace "Put your API key here" with your actual API Key.
 
-6. You can now use the built-in emulator or build your own APK.
+6. For google login to work you must register a google console app, with your apps information. 
+
+7. You can now use the built-in emulator or build your own APK.
 
 # Emulators
 The app has been tested on a real device (Note 20 Ultra) and the Pixel_3a_API_34 emulator in Android Studio. The layout, using vertical constraints as the parent layout, has been tested on these devices and found to work well..
