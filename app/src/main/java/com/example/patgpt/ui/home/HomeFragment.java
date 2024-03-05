@@ -23,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
-import com.example.patgpt.ui.ui.login.LoginFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
@@ -257,7 +256,7 @@ public class HomeFragment extends Fragment {
 
     private String loadProfileImage() {
         if (getContext() != null) {
-            return getContext().getSharedPreferences("LoggedInUserProfileImage", 0).getString("profileImage", "");
+            return getContext().getSharedPreferences("LoggedInUser", 0).getString("profileImage", "");
         }
         return "";
     }

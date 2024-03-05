@@ -1,8 +1,5 @@
 package com.example.patgpt;
 
-
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.patgpt.ui.ui.login.LoginFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -54,7 +50,7 @@ public class Logout extends Fragment {
 
     public void signOut() {
         deleteSharedPreferencesLoggedInUser();
-        deleteSharedPreferencesProfileImage();
+        //deleteSharedPreferencesProfileImage();
 
         gsc.signOut().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -74,20 +70,14 @@ public class Logout extends Fragment {
 
     // Delete shared preferences loggedInUser
     public void deleteSharedPreferencesLoggedInUser() {
-        Context context = requireContext();
-
-
-        // Clear the user email
-        SharedPreferences userPrefs = context.getSharedPreferences("LoggedInUser", 0);
-        userPrefs.edit().remove("email").apply();
+//        Context context = requireContext();
+//        // Clear the user email
+//        SharedPreferences userPrefs = context.getSharedPreferences("LoggedInUser", 0);
+//        userPrefs.edit().remove("email").apply();
+        requireActivity().getSharedPreferences("LoggedInUser", 0).edit().clear().apply();
 
     }
-    public void deleteSharedPreferencesProfileImage() {
-        Context context = requireContext();
-        // Clear the profile image URL
-        SharedPreferences imagePrefs = context.getSharedPreferences("LoggedInUserProfileImage", 0);
-        imagePrefs.edit().remove("profileImage").apply();
-    }
+
 //
 //        requireActivity().getSharedPreferences("LoggedInUser", 0).edit().clear().apply();
 //        requireActivity().getSharedPreferences("LoggedInUserProfileImage", 0).edit().clear().apply();
@@ -99,15 +89,11 @@ public class Logout extends Fragment {
 //        SharedPreferences userPrefs = context.getSharedPreferences("LoggedInUser", 0);
 //        userPrefs.edit().remove("email").apply();
 //
-//        Log.d("Logout shared prefs url", context.getSharedPreferences("LoggedInUserProfileImage", 0).getString("profileImage", "null"));
+//
 //        // Clear the profile image URL
 //        SharedPreferences imagePrefs = context.getSharedPreferences("LoggedInUserProfileImage", 0);
 //        imagePrefs.edit().remove("profileImage").apply();
 //    }
-
-    public void deleteProfileImage() {
-        
-    }
 
     @Override
     public void onDetach() {

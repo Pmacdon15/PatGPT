@@ -26,7 +26,6 @@ public class RegistrationFragment extends Fragment {
     private String last_name;
     private String pass;
     private String confirm_pass;
-    private String LoggedInUser;
 
     public RegistrationFragment() {
         // Required empty public constructor
@@ -48,6 +47,7 @@ public class RegistrationFragment extends Fragment {
         password = view.findViewById(R.id.password);
         confirm_password = view.findViewById(R.id.confirm_password);
     }
+
     public void createOnClickListeners() {
         registerButton.setOnClickListener(v -> registerUser());
     }
@@ -61,12 +61,12 @@ public class RegistrationFragment extends Fragment {
 
     public void registerUser() {
         getTextValues();
-        if(!confirmPasswordsMatch()) {
+        if (!confirmPasswordsMatch()) {
             Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
             return;
         }
         databaseHelper = new DatabaseHelper(getActivity());
-        if (databaseHelper.addUser(LoginFragment.newUserName,first_name, last_name, pass)) {
+        if (databaseHelper.addUser(LoginFragment.newUserName, first_name, last_name, pass)) {
             saveUserEmail(LoginFragment.newUserName);
             Toast.makeText(getActivity(), "User Registered", Toast.LENGTH_SHORT).show();
             navigateToHome();
@@ -90,15 +90,10 @@ public class RegistrationFragment extends Fragment {
         NavController navController = Navigation.findNavController(requireView());
         navController.navigate(R.id.nav_home);
     }
-//    private String loadUserEmail() {
-//        if (getContext() != null) {
-//            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
-//        }
-//        return "";
-//    }
-private void saveUserEmail(String email) {
-    if (getContext() != null) {
-        getContext().getSharedPreferences("LoggedInUser", 0).edit().putString("email", email).apply();
+
+    private void saveUserEmail(String email) {
+        if (getContext() != null) {
+            getContext().getSharedPreferences("LoggedInUser", 0).edit().putString("email", email).apply();
+        }
     }
-}
 }

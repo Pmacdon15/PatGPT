@@ -202,7 +202,7 @@ public class LoginFragment extends Fragment {
     // Save uri for profile image to SharedPreferences
     private void saveProfileImage(Uri url) {
         if (getContext() != null) {
-            getContext().getSharedPreferences("LoggedInUserProfileImage", 0).edit().putString("profileImage", url.toString()).apply();
+            getContext().getSharedPreferences("LoggedInUser", 0).edit().putString("profileImage", url.toString()).apply();
         }
     }
     // Load user's email from SharedPreferences
