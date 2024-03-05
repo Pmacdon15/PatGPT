@@ -269,14 +269,18 @@ public class HomeFragment extends Fragment {
                 View headerView = navigationView.getHeaderView(0);
                 TextView textViewNavHeader = headerView.findViewById(R.id.textView);
                 if (textViewNavHeader != null) {
-                    if (LoginFragment.LoggedInUser == null) {
-                        LoginFragment.LoggedInUser = LoginFragment.newUserName;
-                    }
-                    // ELse set the username to the profileUsername
                     textViewNavHeader.setText(LoginFragment.LoggedInUser);
                 }
             }
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(checkForImageFile()) {
+            setNavHeaderImage();
+        }
+        setNavHeaderUsername();
     }
 
 
