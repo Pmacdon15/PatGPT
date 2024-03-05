@@ -212,12 +212,14 @@ public class HomeFragment extends Fragment {
 
     public void saveHistory(String content) {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getActivity())) {
-            if (databaseHelper.addHistoryForUser(LoginFragment.LoggedInUser, content)) {
-                Log.d("HistoryFragment", "History added successfully");
-            }
-            // Else log an error message
-            Log.e("HistoryFragment", "Failed to add history");
+            if (!databaseHelper.addHistoryForUser(LoginFragment.LoggedInUser, content)) {
 
+                if (!databaseHelper.addHistoryGoogleUser(LoginFragment.LoggedInUser, content)) {
+                    Log.e("HistoryFragment", "Failed to add history");
+                }
+            }
+            // Else successfully added history
+            Log.d("HistoryFragment", "History added successfully");
         }
     }
 

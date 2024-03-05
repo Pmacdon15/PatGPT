@@ -42,29 +42,28 @@ public class HistoryFragment extends Fragment {
     public void assignViews(View view) {
         textViewContent = view.findViewById(R.id.textView_Content);
     }
+
     public void assignButton(View view) {
         clearHistoryButton = view.findViewById(R.id.button_Clear);
     }
+
     public String loadHistoryForUser() {
         Cursor cursor = databaseHelper.getHistoryForUser(UserEmail);
+
         StringBuilder historyContentBuilder = new StringBuilder();
+        if (cursor == null || cursor.getCount() == 0) { // Check if cursor is null or empty
+            cursor = databaseHelper.getHistoryForGoogleUser(UserEmail); // Fallback to Google user history
+        }
+
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {
-                    int idIndex = cursor.getColumnIndex(HistoryDB.COLUMN_ID);
-                    int userIdIndex = cursor.getColumnIndex(HistoryDB.COLUMN_USER_ID);
                     int resultIndex = cursor.getColumnIndex(HistoryDB.COLUMN_RESULT);
                     do {
-                        // Check if column indexes are valid before accessing data
-                        if (idIndex != -1 && userIdIndex != -1 && resultIndex != -1) {
-                            int id = cursor.getInt(idIndex);
-                            int userId = cursor.getInt(userIdIndex);
-                            String result = cursor.getString(resultIndex);
-                            historyContentBuilder.append(result).append("\n");
-                            Log.d("HistoryFragment", "id: " + id + ", userId: " + userId + ", result: " + result);
-                        } else {
-                            Log.e("HistoryFragment", "Invalid column index detected");
-                        }
+                        String result = cursor.getString(resultIndex);
+                        historyContentBuilder.append(result).append("\n \n \n");
+                        // No need to log id and userId for Google user history
+                        Log.d("HistoryFragment", "result: " + result);
                     } while (cursor.moveToNext());
                 }
             } finally {
@@ -74,22 +73,19 @@ public class HistoryFragment extends Fragment {
             String historyContent = historyContentBuilder.toString();
             Log.d("HistoryFragment", "History content:\n" + historyContent);
         } else {
-            Log.e("HistoryFragment", "Cursor is null");
+            Log.e("LocalHistoryFragment", "Cursor is null");
         }
         return historyContentBuilder.toString();
     }
 
+
     public void clearHistory() {
         // Clear history for the current user
-        boolean isHistoryCleared = databaseHelper. deleteHistoryForUser(UserEmail);
+        boolean isHistoryCleared = databaseHelper.deleteHistoryForUser(UserEmail);
         if (isHistoryCleared) {
             textViewContent.setText("");
         }
     }
-
-
-
-
 
 
 }

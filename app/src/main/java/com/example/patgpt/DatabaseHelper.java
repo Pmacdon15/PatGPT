@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
     // Database Name
     private static final String DATABASE_NAME = "AppDBManager.db";
 
@@ -36,7 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         historyValues.put(HistoryDB.COLUMN_USER_ID, 1);
         historyValues.put(HistoryDB.COLUMN_RESULT, "This is a sample result");
         db.insert(HistoryDB.TABLE_NAME, null, historyValues);
-
+        // Create HistoryGoogleUser table
+        db.execSQL(HistoryGoogleUserDB.CREATE_TABLE);
     }
 
     @Override
@@ -44,6 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + UserDB.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + HistoryDB.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + HistoryGoogleUserDB.TABLE_NAME);
 
         // Create tables again
         onCreate(db);
@@ -150,7 +152,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getHistoryForUser(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
-
         // Querying UserDB to get userId based on email
         Cursor userCursor = db.query(UserDB.TABLE_NAME, new String[]{UserDB.COLUMN_USER_ID}, UserDB.COLUMN_EMAIL + "=?", new String[]{email}, null, null, null);
         int userId = -1; // Default value if user is not found
@@ -171,6 +172,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // You can return the cursor here, and handle it accordingly in the calling code
         return historyCursor;
     }
+
+    public Cursor getHistoryForGoogleUser(String email) {
+        try{
+            SQLiteDatabase db = this.getReadableDatabase();
+            String query = "SELECT * FROM " + HistoryGoogleUserDB.TABLE_NAME + " WHERE "
+                    + HistoryGoogleUserDB.COLUMN_USER_E_MAIL + " = ?";
+            return db.rawQuery(query, new String[]{email});
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
     public Boolean deleteHistoryForUser(String email) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -203,6 +218,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userId = userCursor.getInt(columnIndex);
             }
         }
+        // Check if user exists in the database
+        if (userId == -1) {
+            return false;
+        }
         userCursor.close();
 
         // Inserting into History table
@@ -210,6 +229,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(HistoryDB.COLUMN_USER_ID, userId);
         values.put(HistoryDB.COLUMN_RESULT, result);
         long newRowId = db.insert(HistoryDB.TABLE_NAME, null, values);
+        return newRowId != -1;
+    }
+
+    public boolean addHistoryGoogleUser(String email, String result) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(HistoryGoogleUserDB.COLUMN_USER_E_MAIL, email);
+        values.put(HistoryGoogleUserDB.COLUMN_RESULT, result);
+        long newRowId = db.insert(HistoryGoogleUserDB.TABLE_NAME, null, values);
         return newRowId != -1;
     }
 }
