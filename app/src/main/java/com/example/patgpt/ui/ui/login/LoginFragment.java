@@ -46,6 +46,8 @@ public class LoginFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     public static String newUserName = "";
     public static String LoggedInUser = "";
+    private EditText usernameEditText;
+    private EditText passwordEditText;
 
 
     @Nullable
@@ -90,8 +92,8 @@ public class LoginFragment extends Fragment {
         }
 
         databaseHelper = new DatabaseHelper(getContext());
-        EditText usernameEditText = view.findViewById(R.id.username);
-        EditText passwordEditText = view.findViewById(R.id.password);
+        usernameEditText = view.findViewById(R.id.username);
+        passwordEditText = view.findViewById(R.id.password);
         Button loginButton = view.findViewById(R.id.login);
 
         final Button signInWithGoogle = view.findViewById(R.id.login_with_google);
@@ -107,6 +109,23 @@ public class LoginFragment extends Fragment {
             return false;
         });
 
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save the username and password from the EditTexts
+        outState.putString("username", usernameEditText.getText().toString());
+        outState.putString("password", passwordEditText.getText().toString());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        // Restore the username and password from the EditTexts
+        if (savedInstanceState != null) {
+            usernameEditText.setText(savedInstanceState.getString("username"));
+            passwordEditText.setText(savedInstanceState.getString("password"));
+        }
     }
     public void signIn(String username, String password) {
         // check if you can remove nesting with return later
@@ -129,13 +148,11 @@ public class LoginFragment extends Fragment {
         NavController navController = Navigation.findNavController(requireView());
         navController.navigate(R.id.nav_home);
     }
-
     private void navigateToRegistration() {
         // If login is successful, navigate to HomeFragment
         NavController navController = Navigation.findNavController(requireView());
         navController.navigate(R.id.nav_registration);
     }
-
 
     private void showLoginFailed(@StringRes Integer errorString) {
         if (getContext() != null && getContext().getApplicationContext() != null) {
