@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
     private EditText editTextPrompt;
     private FragmentHomeBinding binding;
     private Uri imageUri;
-    private String imageUrl;
+    private String LoggedInUser;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -70,7 +70,8 @@ public class HomeFragment extends Fragment {
             setNavHeaderImage();
         }
 
-        Log.d("HomeFragment", "onCreateView: " + LoginFragment.LoggedInUser);
+        LoggedInUser = loadUserEmail();
+        Log.d("HomeFragment", "onCreateView: " + LoggedInUser);
         //setNavHeaderUsername();
         return root;
     }
@@ -249,21 +250,13 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public void setNavHeaderUsername() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            NavigationView navigationView = activity.findViewById(R.id.nav_view);
-            if (navigationView != null) {
-                View headerView = navigationView.getHeaderView(0);
-                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
-                if (textViewNavHeader != null) {
-                    textViewNavHeader.setText(LoginFragment.LoggedInUser);
-                }
-            }
+    // Get LoggedInUser from SharedPreferences
+    public String loadUserEmail() {
+        if (getContext() != null) {
+            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
         }
+        return "";
     }
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

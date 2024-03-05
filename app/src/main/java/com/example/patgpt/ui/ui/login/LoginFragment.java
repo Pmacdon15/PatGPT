@@ -23,7 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
-import android.widget.ImageView;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +37,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.squareup.picasso.Picasso;
+
 
 
 public class LoginFragment extends Fragment {
@@ -47,7 +47,7 @@ public class LoginFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     public static String newUserName = "";
     public static String LoggedInUser = "";
-
+    private TextView textViewNavHeader;
 
     @Nullable
     @Override
@@ -63,6 +63,16 @@ public class LoginFragment extends Fragment {
 
 
         binding = FragmentLoginBinding.inflate(inflater, container, false);
+        Activity activity = getActivity();
+        if (activity != null) {
+            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+            if (navigationView != null) {
+                View headerView = navigationView.getHeaderView(0);
+                textViewNavHeader = headerView.findViewById(R.id.textView);
+            } else {
+                Log.d("LoginFragment", "navigationView is null");
+            }
+        }
         return binding.getRoot();
     }
 
@@ -74,16 +84,19 @@ public class LoginFragment extends Fragment {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
         if (account != null) {
             // User is already logged in, navigate to the home activity directly
-            Log.d("LoginFragment", "Account: " + account.getEmail());
-            // Below doesn't work
-            LoginFragment.LoggedInUser = account.getEmail();
+            LoggedInUser = account.getEmail();
+            saveUserEmail(LoggedInUser);
+            Log.d("LoginFragment", "Account: " + LoggedInUser);
             Log.d("LoginFragment", "LoggedInUser: " + LoggedInUser);
+            setNavHeaderUsername();
             navigateToHome();
             return;
         }
-        if (!loadUserEmail().equals("")) {
-            LoggedInUser = loadUserEmail();
+        LoggedInUser = loadUserEmail();
+        saveUserEmail(LoggedInUser);
+        if (!LoggedInUser.equals("")) {
             Log.d("LoginFragment", "LoggedInUser: " + LoggedInUser);
+            setNavHeaderUsername();
             navigateToHome();
             return;
         }
@@ -213,20 +226,11 @@ public class LoginFragment extends Fragment {
 //    }
 
     public void setNavHeaderUsername() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            NavigationView navigationView = activity.findViewById(R.id.nav_view);
-            if (navigationView != null) {
-                View headerView = navigationView.getHeaderView(0);
-                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
-                if (textViewNavHeader != null) {
-                    textViewNavHeader.setText(loadUserEmail());
-                }
-            }else {
-                Log.d("LoginFragment", "navigationView is null");
-            }
+        if (textViewNavHeader != null) {
+            textViewNavHeader.setText(LoggedInUser);
         }
     }
+
 
     @Override
     public void onDestroyView() {
