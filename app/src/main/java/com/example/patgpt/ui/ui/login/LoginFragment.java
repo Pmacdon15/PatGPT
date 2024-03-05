@@ -45,7 +45,7 @@ public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
     private DatabaseHelper databaseHelper;
     public static String newUserName = "";
-    public static String LoggedInUser = "";
+    public String LoggedInUser = "";
     private EditText usernameEditText;
     private EditText passwordEditText;
     private boolean isViewsInitialized = false;

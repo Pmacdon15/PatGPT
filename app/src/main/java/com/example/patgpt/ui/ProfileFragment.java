@@ -46,11 +46,13 @@ public class ProfileFragment extends Fragment {
     private EditText editTextFirstName;
     private TextView textviewLastName;
     private EditText editTextLastName, editTextPassword_Current, editTextPassword_New, editTextPassword_Confirm;
+    private String LoggedInUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("profileUsername", LoginFragment.LoggedInUser);
+        LoggedInUser = loadUserEmail();
+        Log.d("profileUsername", LoggedInUser);
     }
 
     @Override
@@ -58,6 +60,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         initializeViews(root);
+        LoggedInUser = loadUserEmail();
         return root;
     }
 
@@ -126,7 +129,7 @@ public class ProfileFragment extends Fragment {
             try {
                 InputStream imageStream = activity.getContentResolver().openInputStream(imageUri);
                 Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                FileOutputStream out = activity.openFileOutput(LoginFragment.LoggedInUser + "profileImage.jpg", Context.MODE_PRIVATE);
+                FileOutputStream out = activity.openFileOutput(LoggedInUser + "profileImage.jpg", Context.MODE_PRIVATE);
                 selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 Log.d("Image", "Image Saved Locally");
                 out.close();
@@ -140,7 +143,7 @@ public class ProfileFragment extends Fragment {
     public void setProfileImage() {
         Activity activity = getActivity();
         if (activity != null) {
-            File file = activity.getFileStreamPath(LoginFragment.LoggedInUser + "profileImage.jpg");
+            File file = activity.getFileStreamPath(LoggedInUser + "profileImage.jpg");
             if (file.exists()) {
                 Uri imageUri = Uri.fromFile(file);
                 imageViewProfile.setImageURI(imageUri);
@@ -151,7 +154,7 @@ public class ProfileFragment extends Fragment {
     // Set The Text views
     private void SetFirstNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
-            String currentFirstName = databaseHelper.getFirstName(LoginFragment.LoggedInUser);
+            String currentFirstName = databaseHelper.getFirstName(LoggedInUser);
             textviewFirstName.setText(currentFirstName);
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
@@ -160,7 +163,7 @@ public class ProfileFragment extends Fragment {
 
     private void SetLastNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
-            String currentLastName = databaseHelper.getLastName(LoginFragment.LoggedInUser);
+            String currentLastName = databaseHelper.getLastName(LoggedInUser);
             textviewLastName.setText(currentLastName);
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
@@ -172,7 +175,7 @@ public class ProfileFragment extends Fragment {
         Log.d("Maintenance", " Edit First Name Button Clicked");
         String newFirstName = editTextFirstName.getText().toString();
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
-            if (databaseHelper.editUserFirstNameDB(LoginFragment.LoggedInUser, newFirstName)) {
+            if (databaseHelper.editUserFirstNameDB(LoggedInUser, newFirstName)) {
                 Log.d("Maintenance", "First Name Updated");
                 Log.d("newFirstName", newFirstName);
                 textviewFirstName.setText(newFirstName);
@@ -189,7 +192,7 @@ public class ProfileFragment extends Fragment {
         Log.d("Maintenance", " Edit Last Name Button Clicked");
         String newLastName = editTextLastName.getText().toString();
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
-            if (databaseHelper.editUserLastNameDB(LoginFragment.LoggedInUser, newLastName)) {
+            if (databaseHelper.editUserLastNameDB(LoggedInUser, newLastName)) {
                 Log.d("Maintenance", "Last Name Updated");
                 Log.d("newLastName", newLastName);
                 textviewLastName.setText(newLastName);
@@ -208,7 +211,7 @@ public class ProfileFragment extends Fragment {
         String newPassword = editTextPassword_New.getText().toString();
         String confirmPassword = editTextPassword_Confirm.getText().toString();
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
-            if (databaseHelper.editUserPasswordDB(LoginFragment.LoggedInUser, currentPassword, newPassword, confirmPassword)) {
+            if (databaseHelper.editUserPasswordDB(LoggedInUser, currentPassword, newPassword, confirmPassword)) {
                 Log.d("Maintenance", "Password Updated");
                 Toast.makeText(getContext(), "Password Updated", Toast.LENGTH_SHORT).show();
             } else {
@@ -216,6 +219,12 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), "Password Not Updated, Check Input is Correct!", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+    private String loadUserEmail() {
+        if (getContext() != null) {
+            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
+        }
+        return "";
     }
 
     @Override

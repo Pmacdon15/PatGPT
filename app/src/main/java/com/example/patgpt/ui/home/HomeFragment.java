@@ -206,9 +206,9 @@ public class HomeFragment extends Fragment {
 
     public void saveHistory(String content) {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getActivity())) {
-            if (!databaseHelper.addHistoryForUser(LoginFragment.LoggedInUser, content)) {
+            if (!databaseHelper.addHistoryForUser(LoggedInUser, content)) {
 
-                if (!databaseHelper.addHistoryGoogleUser(LoginFragment.LoggedInUser, content)) {
+                if (!databaseHelper.addHistoryGoogleUser(LoggedInUser, content)) {
                     Log.e("HistoryFragment", "Failed to add history");
                 }
             }
@@ -220,7 +220,7 @@ public class HomeFragment extends Fragment {
     public boolean checkForImageFile() {
         Activity activity = getActivity();
         if (activity != null) {
-            String fileName = LoginFragment.LoggedInUser + "profileImage.jpg";
+            String fileName = LoggedInUser + "profileImage.jpg";
             if (fileName.equals("profileImage.jpg")) {
                 // Do not load the image this is from Earlier iterations before loginViewModel.profileUsername was implemented
                 Log.d("File Check", "No profile image to load");
@@ -240,7 +240,7 @@ public class HomeFragment extends Fragment {
     public void setNavHeaderImage() {
         Activity activity = getActivity();
         if (activity != null) {
-            File file = activity.getFileStreamPath(LoginFragment.LoggedInUser + "profileImage.jpg");
+            File file = activity.getFileStreamPath(LoggedInUser + "profileImage.jpg");
             if (file.exists()) {
                 Uri imageUri = Uri.fromFile(file);
                 NavigationView navigationView = activity.findViewById(R.id.nav_view);

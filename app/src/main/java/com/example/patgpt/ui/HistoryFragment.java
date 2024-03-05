@@ -22,6 +22,7 @@ public class HistoryFragment extends Fragment {
     private TextView textViewContent;
     private Button clearHistoryButton;
 
+
     public HistoryFragment() {
         // Required empty public constructor
     }
@@ -32,7 +33,7 @@ public class HistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         assignViews(view); // Call assignViews() before accessing textViewContent
         databaseHelper = new DatabaseHelper(getActivity());
-        UserEmail = LoginFragment.LoggedInUser;
+        UserEmail = loadUserEmail();
         textViewContent.setText(loadHistoryForUser());
         assignButton(view);
         clearHistoryButton.setOnClickListener(v -> clearHistory());
@@ -89,6 +90,12 @@ public class HistoryFragment extends Fragment {
         if (isHistoryCleared) {
             textViewContent.setText("");
         }
+    }
+    private String loadUserEmail() {
+        if (getContext() != null) {
+            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
+        }
+        return "";
     }
 
 

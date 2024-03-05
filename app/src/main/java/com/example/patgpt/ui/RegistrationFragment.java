@@ -26,6 +26,7 @@ public class RegistrationFragment extends Fragment {
     private String last_name;
     private String pass;
     private String confirm_pass;
+    private String LoggedInUser;
 
     public RegistrationFragment() {
         // Required empty public constructor
@@ -37,6 +38,7 @@ public class RegistrationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_registration, container, false);
         assignViewsAndButton(view);
         createOnClickListeners();
+        LoggedInUser=loadUserEmail();
         return view;
     }
 
@@ -66,7 +68,7 @@ public class RegistrationFragment extends Fragment {
         }
         databaseHelper = new DatabaseHelper(getActivity());
         if (databaseHelper.addUser(LoginFragment.newUserName,first_name, last_name, pass)) {
-            LoginFragment.LoggedInUser = LoginFragment.newUserName;
+            LoggedInUser = LoginFragment.newUserName;
             Toast.makeText(getActivity(), "User Registered", Toast.LENGTH_SHORT).show();
             navigateToHome();
         } else {
@@ -88,5 +90,11 @@ public class RegistrationFragment extends Fragment {
         // If login is successful, navigate to HomeFragment
         NavController navController = Navigation.findNavController(requireView());
         navController.navigate(R.id.nav_home);
+    }
+    private String loadUserEmail() {
+        if (getContext() != null) {
+            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
+        }
+        return "";
     }
 }
