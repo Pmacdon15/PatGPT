@@ -82,6 +82,10 @@ public class HistoryFragment extends Fragment {
     public void clearHistory() {
         // Clear history for the current user
         boolean isHistoryCleared = databaseHelper.deleteHistoryForUser(UserEmail);
+        if (!isHistoryCleared) {
+            isHistoryCleared = databaseHelper.deleteHistoryForGoogleUser(UserEmail);
+        }
+
         if (isHistoryCleared) {
             textViewContent.setText("");
         }

@@ -72,6 +72,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return result;
     }
+    private boolean isGoogleUser(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + HistoryGoogleUserDB.TABLE_NAME + " WHERE "
+                + HistoryGoogleUserDB.COLUMN_USER_E_MAIL + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{email});
+        boolean isGoogleUser = cursor.getCount() > 0;
+        cursor.close();
+        return isGoogleUser;
+    }
+
     public boolean addUser(String email, String firstName, String lastName, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -190,19 +200,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Boolean deleteHistoryForUser(String email) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Querying UserDB to get userId based on email
-        Cursor userCursor = db.query(UserDB.TABLE_NAME, new String[]{UserDB.COLUMN_USER_ID}, UserDB.COLUMN_EMAIL + "=?", new String[]{email}, null, null, null);
-        int userId = -1; // Default value if user is not found
-        if (userCursor.moveToFirst()) {
-            int columnIndex = userCursor.getColumnIndex(UserDB.COLUMN_USER_ID);
-            if (columnIndex != -1) {
-                userId = userCursor.getInt(columnIndex);
-            }
-        }
-        userCursor.close();
+        // Check if the user is a regular user or a Google user
+        boolean isGoogleUser = isGoogleUser(email);
 
-        // Deleting from History table
-        int rowsAffected = db.delete(HistoryDB.TABLE_NAME, HistoryDB.COLUMN_USER_ID + "=?", new String[]{String.valueOf(userId)});
+        if (isGoogleUser) {
+            // If the user is a Google user, delete history from the Google user table
+            return deleteHistoryForGoogleUser(email);
+        } else {
+            // If the user is a regular user, delete history from the regular user table
+            // Querying UserDB to get userId based on email
+            Cursor userCursor = db.query(UserDB.TABLE_NAME, new String[]{UserDB.COLUMN_USER_ID}, UserDB.COLUMN_EMAIL + "=?", new String[]{email}, null, null, null);
+            int userId = -1; // Default value if user is not found
+            if (userCursor.moveToFirst()) {
+                int columnIndex = userCursor.getColumnIndex(UserDB.COLUMN_USER_ID);
+                if (columnIndex != -1) {
+                    userId = userCursor.getInt(columnIndex);
+                }
+            }
+            userCursor.close();
+
+            // Deleting from History table
+            int rowsAffected = db.delete(HistoryDB.TABLE_NAME, HistoryDB.COLUMN_USER_ID + "=?", new String[]{String.valueOf(userId)});
+            return rowsAffected > 0;
+        }
+    }
+
+    public Boolean deleteHistoryForGoogleUser(String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsAffected = db.delete(HistoryGoogleUserDB.TABLE_NAME, HistoryGoogleUserDB.COLUMN_USER_E_MAIL + "=?", new String[]{email});
         return rowsAffected > 0;
     }
 
