@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.patgpt.R;
 
+import com.example.patgpt.UserData;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -74,11 +75,8 @@ public class DalleFragment extends Fragment {
         editTextPrompt = root.findViewById(R.id.editText_Prompt);
 
         buttonSend.setOnClickListener(view -> makeApiRequest());
-
         imageViewContent.setOnClickListener(view -> shareImageFromImageView());
-        // If screen rotates, restore the content of the ImageViewContent
-       // if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
-        // Inflate the layout for this fragment
+
         return root;
     }
 
@@ -92,6 +90,12 @@ public class DalleFragment extends Fragment {
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        // Set the username in the navigation header and set the profile image
+        String loggedInUser = UserData.loadUserEmail(requireContext());
+        UserData.setNavHeaderUsername(getActivity(), loggedInUser);
+        if(!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())){
+            UserData.setNavHeaderGoogleImage(getActivity());
+        }
 
         // Restore the url of the imageViewContent
         if (savedInstanceState != null) {
@@ -208,7 +212,6 @@ public class DalleFragment extends Fragment {
             if (activity != null) {
                 saveImageLocally();
                 File savedImageFile = new File(activity.getFilesDir(), "sharedImage.jpg");
-
                 // Create an Intent to share the image
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("image/jpeg");
