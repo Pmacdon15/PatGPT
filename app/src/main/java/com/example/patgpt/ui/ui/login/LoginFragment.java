@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,10 @@ public class LoginFragment extends Fragment {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
         if (account != null) {
             // User is already logged in, navigate to the home activity directly
+            Log.d("LoginFragment", "Account: " + account.getEmail());
+            // Below doesn't work
             LoginFragment.LoggedInUser = account.getEmail();
+            Log.d("LoginFragment", "LoggedInUser: " + LoggedInUser);
             navigateToHome();
             return;
         }
@@ -146,8 +150,8 @@ public class LoginFragment extends Fragment {
                     Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                     try {
                         GoogleSignInAccount account = task.getResult(ApiException.class);
-
                         Toast.makeText(getContext(), "Google sign-in successful", Toast.LENGTH_SHORT).show();
+                        LoggedInUser = account.getEmail();
                         Navigation.findNavController(requireView()).navigate(R.id.nav_home);
                     } catch (ApiException e) {
                         // Handle sign-in failure (e.g., show error message)

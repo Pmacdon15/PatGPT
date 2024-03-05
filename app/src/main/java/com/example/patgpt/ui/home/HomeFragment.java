@@ -24,10 +24,6 @@ import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
 import com.example.patgpt.ui.ui.login.LoginFragment;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -36,7 +32,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -67,22 +62,6 @@ public class HomeFragment extends Fragment {
         textViewContent = root.findViewById(R.id.textView_Content);
         editTextPrompt = root.findViewById(R.id.editText_Prompt);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        GoogleSignInClient gsc = GoogleSignIn.getClient(requireContext(), gso);
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
-        if (account != null) {
-            Log.d("GoogleSignIn", "User is signed in");
-            LoginFragment.LoggedInUser = account.getEmail();
-            Log.d("GoogleSignIn", "Username: " + LoginFragment.LoggedInUser);
-            imageUrl = Objects.requireNonNull(account.getPhotoUrl()).toString();
-        } else {
-            Log.d("GoogleSignIn", "User is not signed in");
-        }
-
-
         buttonSend.setOnClickListener(view -> makeApiRequest());
         textViewContent.setOnClickListener(this::shareContent);
         // If screen rotates, restore the content of the TextViewContent
@@ -90,8 +69,8 @@ public class HomeFragment extends Fragment {
         if(checkForImageFile()) {
             setNavHeaderImage();
         }
-        Log.d("LoginFragment", "onViewCreated");
 
+        Log.d("HomeFragment", "onCreateView: " + LoginFragment.LoggedInUser);
         setNavHeaderUsername();
         return root;
     }
