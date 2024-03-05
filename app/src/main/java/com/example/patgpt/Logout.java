@@ -1,10 +1,13 @@
 package com.example.patgpt;
 
+import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +19,9 @@ import androidx.navigation.Navigation;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.navigation.NavigationView;
+
+import java.io.File;
 
 
 public class Logout extends Fragment {
@@ -50,7 +56,7 @@ public class Logout extends Fragment {
 
     public void signOut() {
         deleteSharedPreferencesLoggedInUser();
-        //deleteSharedPreferencesProfileImage();
+        resetNavHeaderImage();
 
         gsc.signOut().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -70,30 +76,25 @@ public class Logout extends Fragment {
 
     // Delete shared preferences loggedInUser
     public void deleteSharedPreferencesLoggedInUser() {
-//        Context context = requireContext();
-//        // Clear the user email
-//        SharedPreferences userPrefs = context.getSharedPreferences("LoggedInUser", 0);
-//        userPrefs.edit().remove("email").apply();
+
         requireActivity().getSharedPreferences("LoggedInUser", 0).edit().clear().apply();
 
     }
 
-//
-//        requireActivity().getSharedPreferences("LoggedInUser", 0).edit().clear().apply();
-//        requireActivity().getSharedPreferences("LoggedInUserProfileImage", 0).edit().clear().apply();
+    public void resetNavHeaderImage() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+            if (navigationView != null) {
+                View headerView = navigationView.getHeaderView(0);
+                ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
+                if (imageViewNavHeader != null) {
+                    imageViewNavHeader.setImageResource(R.mipmap.ic_launcher_round);
+                }
+            }
+        }
+    }
 
-//    public void deleteSharedPreferences() {
-//        Context context = requireContext();
-//
-//        // Clear the user email
-//        SharedPreferences userPrefs = context.getSharedPreferences("LoggedInUser", 0);
-//        userPrefs.edit().remove("email").apply();
-//
-//
-//        // Clear the profile image URL
-//        SharedPreferences imagePrefs = context.getSharedPreferences("LoggedInUserProfileImage", 0);
-//        imagePrefs.edit().remove("profileImage").apply();
-//    }
 
     @Override
     public void onDetach() {

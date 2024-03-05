@@ -51,8 +51,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LoggedInUser = loadUserEmail();
-        Log.d("profileUsername", LoggedInUser);
+
     }
 
     @Override
@@ -61,6 +60,7 @@ public class ProfileFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         initializeViews(root);
         LoggedInUser = loadUserEmail();
+        Log.d("LoggedInUser", LoggedInUser);
         return root;
     }
 
@@ -155,6 +155,7 @@ public class ProfileFragment extends Fragment {
     private void SetFirstNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
             String currentFirstName = databaseHelper.getFirstName(LoggedInUser);
+            Log.d("currentFirstName", currentFirstName);
             textviewFirstName.setText(currentFirstName);
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);

@@ -220,6 +220,7 @@ public class HomeFragment extends Fragment {
         Activity activity = getActivity();
         if (activity != null) {
             String fileName = LoggedInUser + "profileImage.jpg";
+            Log.d("File Check", "Checking for " + fileName);
             if (fileName.equals("profileImage.jpg")) {
                 // Do not load the image this is from Earlier iterations before loginViewModel.profileUsername was implemented
                 Log.d("File Check", "No profile image to load");
@@ -247,6 +248,7 @@ public class HomeFragment extends Fragment {
                     View headerView = navigationView.getHeaderView(0);
                     ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
                     if (imageViewNavHeader != null) {
+                        Log.d("HomeFragment", "Setting nav header image" + imageUri);
                         imageViewNavHeader.setImageURI(imageUri);
                     }
                 }
