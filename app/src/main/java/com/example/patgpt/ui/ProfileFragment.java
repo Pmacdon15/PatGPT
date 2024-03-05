@@ -40,6 +40,7 @@ public class ProfileFragment extends Fragment {
     public ProfileFragment() {
         // Required empty public constructor
     }
+
     private ImageView imageViewProfile;
     private TextView textviewFirstName;
     private EditText editTextFirstName;
@@ -50,17 +51,18 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("profileUsername", LoginFragment.LoggedInUser);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_profile, container, false);//
+        View root = inflater.inflate(R.layout.fragment_profile, container, false);
         initializeViews(root);
         return root;
     }
+
+
+
     private void initializeViews(View rootView) {
         // Set the profile image
         imageViewProfile = rootView.findViewById(R.id.imageView_Profile);
@@ -89,11 +91,13 @@ public class ProfileFragment extends Fragment {
         buttonEditPassword.setOnClickListener(this::editPasswordProfilePage);
 
     }
+
     // Set Profile Image
     public void loadImage(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         imageSelector.launch(intent);
     }
+
     ActivityResultLauncher<Intent> imageSelector = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -115,13 +119,14 @@ public class ProfileFragment extends Fragment {
                 }
             }
     );
+
     public void saveImageLocally(Uri imageUri) {
         Activity activity = getActivity();
         if (activity != null) {
             try {
                 InputStream imageStream = activity.getContentResolver().openInputStream(imageUri);
                 Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                FileOutputStream out = activity.openFileOutput(LoginFragment.LoggedInUser+"profileImage.jpg", Context.MODE_PRIVATE);
+                FileOutputStream out = activity.openFileOutput(LoginFragment.LoggedInUser + "profileImage.jpg", Context.MODE_PRIVATE);
                 selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 Log.d("Image", "Image Saved Locally");
                 out.close();
@@ -130,17 +135,19 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
+
     // Set The Image view
     public void setProfileImage() {
         Activity activity = getActivity();
         if (activity != null) {
-            File file = activity.getFileStreamPath(LoginFragment.LoggedInUser+"profileImage.jpg");
+            File file = activity.getFileStreamPath(LoginFragment.LoggedInUser + "profileImage.jpg");
             if (file.exists()) {
                 Uri imageUri = Uri.fromFile(file);
                 imageViewProfile.setImageURI(imageUri);
             }
         }
     }
+
     // Set The Text views
     private void SetFirstNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
@@ -150,6 +157,7 @@ public class ProfileFragment extends Fragment {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
     }
+
     private void SetLastNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
             String currentLastName = databaseHelper.getLastName(LoginFragment.LoggedInUser);
@@ -158,6 +166,7 @@ public class ProfileFragment extends Fragment {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
     }
+
     // Button Clicks
     public void editFirstNameProfilePage(View view) {
         Log.d("Maintenance", " Edit First Name Button Clicked");
@@ -175,6 +184,7 @@ public class ProfileFragment extends Fragment {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
     }
+
     public void editLastNameProfilePage(View view) {
         Log.d("Maintenance", " Edit Last Name Button Clicked");
         String newLastName = editTextLastName.getText().toString();
@@ -206,5 +216,11 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), "Password Not Updated, Check Input is Correct!", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("ProfileFragment", "onDestroy");
     }
 }

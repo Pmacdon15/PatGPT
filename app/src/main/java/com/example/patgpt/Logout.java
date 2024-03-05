@@ -74,6 +74,7 @@ public class Logout extends Fragment {
     // Delete shared preferences loggedInUser
     public void deleteSharedPreferences() {
         requireActivity().getSharedPreferences("LoggedInUser", 0).edit().clear().apply();
+        requireActivity().getSharedPreferences("profileImage", 0).edit().clear().apply();
     }
 
     @Override

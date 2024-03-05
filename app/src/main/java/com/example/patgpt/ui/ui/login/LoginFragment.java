@@ -48,6 +48,7 @@ public class LoginFragment extends Fragment {
     public static String LoggedInUser = "";
     private EditText usernameEditText;
     private EditText passwordEditText;
+    private boolean isViewsInitialized = false;
 
 
     @Nullable
@@ -99,13 +100,14 @@ public class LoginFragment extends Fragment {
         final Button signInWithGoogle = view.findViewById(R.id.login_with_google);
         signInWithGoogle.setOnClickListener(v -> signInWithGoogle());
         loginButton.setOnClickListener(v -> signIn(usernameEditText.getText().toString(), passwordEditText.getText().toString()));
-
+        isViewsInitialized = true;
         // Set login button to be clicked when the user presses the enter key
         passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 loginButton.performClick();
                 return true;
             }
+
             return false;
         });
 
@@ -113,9 +115,11 @@ public class LoginFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        // Save the username and password from the EditTexts
-        outState.putString("username", usernameEditText.getText().toString());
-        outState.putString("password", passwordEditText.getText().toString());
+        // Save the username and password from the EditTexts if views are initialized
+        if (isViewsInitialized) {
+            outState.putString("username", usernameEditText.getText().toString());
+            outState.putString("password", passwordEditText.getText().toString());
+        }
     }
 
     @Override

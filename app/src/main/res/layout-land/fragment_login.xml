@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingLeft="@dimen/fragment_horizontal_margin"
         android:paddingTop="@dimen/fragment_vertical_margin"
@@ -28,29 +28,29 @@
 
         <EditText
             android:id="@+id/username"
-            android:layout_width="600dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="120dp"
             android:layout_marginBottom="12dp"
-            android:autofillHints=""
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
             android:minHeight="48dp"
-            android:selectAllOnFocus="true" />
+            android:selectAllOnFocus="true"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/password"
-            android:layout_width="600dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:autofillHints=""
             android:hint="@string/prompt_password"
             android:imeActionLabel="@string/action_sign_in_short"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:minHeight="48dp"
-            android:selectAllOnFocus="true" />
+            android:selectAllOnFocus="true"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/login"
@@ -58,16 +58,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:enabled="false"
             android:text="@string/action_sign_in" />
         <Button
+            android:id="@+id/login_with_google"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:id="@+id/login_with_google"
             android:text="@string/action_sign_in_with_google" />
-
 
         <ProgressBar
             android:id="@+id/loading"
