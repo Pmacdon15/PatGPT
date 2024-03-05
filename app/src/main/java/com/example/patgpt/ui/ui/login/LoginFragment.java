@@ -76,7 +76,12 @@ public class LoginFragment extends Fragment {
             navigateToHome();
             return;
         }
-
+        if (!loadUserEmail().equals("")) {
+            LoggedInUser = loadUserEmail();
+            Log.d("LoginFragment", "LoggedInUser: " + LoggedInUser);
+            navigateToHome();
+            return;
+        }
 
         databaseHelper = new DatabaseHelper(getContext());
         EditText usernameEditText = view.findViewById(R.id.username);
@@ -102,6 +107,7 @@ public class LoginFragment extends Fragment {
         // check if you can remove nesting with return later
         if (databaseHelper.checkUser(username, password)) {
             LoggedInUser = username;
+            saveUserEmail(LoggedInUser);
             navigateToHome();
         } else {
             showLoginFailed(R.string.login_failed);
@@ -152,6 +158,7 @@ public class LoginFragment extends Fragment {
                         GoogleSignInAccount account = task.getResult(ApiException.class);
                         Toast.makeText(getContext(), "Google sign-in successful", Toast.LENGTH_SHORT).show();
                         LoggedInUser = account.getEmail();
+                        saveUserEmail(LoggedInUser);
                         Navigation.findNavController(requireView()).navigate(R.id.nav_home);
                     } catch (ApiException e) {
                         // Handle sign-in failure (e.g., show error message)
@@ -161,7 +168,19 @@ public class LoginFragment extends Fragment {
             }
     );
 
-
+    // Save user's email to SharedPreferences
+    private void saveUserEmail(String email) {
+        if (getContext() != null) {
+            getContext().getSharedPreferences("LoggedInUser", 0).edit().putString("email", email).apply();
+        }
+    }
+    // Load user's email from SharedPreferences
+    private String loadUserEmail() {
+        if (getContext() != null) {
+            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
+        }
+        return "";
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

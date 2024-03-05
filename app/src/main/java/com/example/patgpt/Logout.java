@@ -54,6 +54,8 @@ public class Logout extends Fragment {
 
     public void signOut() {
         LoginFragment.LoggedInUser = "";
+        deleteSharedPreferences();
+
         gsc.signOut().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 navigateToLogin();
@@ -69,7 +71,10 @@ public class Logout extends Fragment {
         NavController navController = Navigation.findNavController(requireView());
         navController.navigate(R.id.nav_login);
     }
-
+    // Delete shared preferences loggedInUser
+    public void deleteSharedPreferences() {
+        requireActivity().getSharedPreferences("LoggedInUser", 0).edit().clear().apply();
+    }
 
     @Override
     public void onDetach() {
