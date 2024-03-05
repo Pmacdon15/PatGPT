@@ -21,8 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 
-
-
 public class Logout extends Fragment {
     private GoogleSignInClient gsc;
 

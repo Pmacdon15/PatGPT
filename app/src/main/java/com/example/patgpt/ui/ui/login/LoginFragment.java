@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
+import com.example.patgpt.UserData;
 import com.example.patgpt.databinding.FragmentLoginBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -37,6 +38,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Objects;
 
 
 public class LoginFragment extends Fragment {
@@ -78,14 +80,16 @@ public class LoginFragment extends Fragment {
         if (account != null) {
             // User is already logged in, navigate to the home activity directly
             LoggedInUser = account.getEmail();
-            saveUserEmail(LoggedInUser);
+            //saveUserEmail(LoggedInUser);
+            UserData.saveUserEmail(requireContext(), LoggedInUser);
             Log.d("LoginFragment", "Account: " + LoggedInUser);
             Log.d("LoginFragment", "LoggedInUser: " + LoggedInUser);
             navigateToHome();
             return;
         }
-        LoggedInUser = loadUserEmail();
-        saveUserEmail(LoggedInUser);
+        LoggedInUser = UserData.loadUserEmail(requireContext());
+        //saveUserEmail(LoggedInUser);
+        UserData.saveUserEmail(requireContext(), LoggedInUser);
         if (!LoggedInUser.equals("")) {
             Log.d("LoginFragment", "LoggedInUser: " + LoggedInUser);
             navigateToHome();
@@ -135,7 +139,8 @@ public class LoginFragment extends Fragment {
         // check if you can remove nesting with return later
         if (databaseHelper.checkUser(username, password)) {
             LoggedInUser = username;
-            saveUserEmail(LoggedInUser);
+            //saveUserEmail(LoggedInUser);
+            UserData.saveUserEmail(requireContext(), LoggedInUser);
             navigateToHome();
         } else {
             showLoginFailed(R.string.login_failed);
@@ -182,8 +187,10 @@ public class LoginFragment extends Fragment {
                         GoogleSignInAccount account = task.getResult(ApiException.class);
                         Toast.makeText(getContext(), "Google sign-in successful", Toast.LENGTH_SHORT).show();
                         LoggedInUser = account.getEmail();
-                        saveUserEmail(LoggedInUser);
-                        saveProfileImage(account.getPhotoUrl());
+                        //saveUserEmail(LoggedInUser);
+                        UserData.saveUserEmail(requireContext(), LoggedInUser);
+                        //saveProfileImage(account.getPhotoUrl());
+                        UserData.saveProfileImage(requireContext(), Objects.requireNonNull(account.getPhotoUrl()));
                         Navigation.findNavController(requireView()).navigate(R.id.nav_home);
                     } catch (ApiException e) {
                         // Handle sign-in failure (e.g., show error message)
