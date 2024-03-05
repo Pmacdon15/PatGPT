@@ -53,7 +53,7 @@ public class Logout extends Fragment {
     }
 
     public void signOut() {
-        //deleteSharedPreferencesLoggedInUser();
+        deleteSharedPreferencesLoggedInUser();
         deleteSharedPreferencesProfileImage();
 
         gsc.signOut().addOnCompleteListener(task -> {
