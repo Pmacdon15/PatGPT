@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
 
         LoggedInUser = loadUserEmail();
         Log.d("HomeFragment", "onCreateView: " + LoggedInUser);
-        //setNavHeaderUsername();
+
         return root;
     }
 
@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
         if(checkForImageFile()) {
             setNavHeaderImage();
         }
-        //setNavHeaderUsername();
+        setNavHeaderUsername();
     }
 
 
@@ -246,6 +246,22 @@ public class HomeFragment extends Fragment {
                         imageViewNavHeader.setImageURI(imageUri);
                     }
                 }
+            }
+        }
+    }
+    // Set navHeader to user's name
+    public void setNavHeaderUsername() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+            if (navigationView != null) {
+                View headerView = navigationView.getHeaderView(0);
+                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
+                if (textViewNavHeader != null) {
+                    textViewNavHeader.setText(LoggedInUser);
+                }
+            }else {
+                Log.d("HomeFragment", "navigationView is null");
             }
         }
     }

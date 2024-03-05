@@ -47,7 +47,7 @@ public class LoginFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     public static String newUserName = "";
     public static String LoggedInUser = "";
-    private TextView textViewNavHeader;
+
 
     @Nullable
     @Override
@@ -63,16 +63,7 @@ public class LoginFragment extends Fragment {
 
 
         binding = FragmentLoginBinding.inflate(inflater, container, false);
-        Activity activity = getActivity();
-        if (activity != null) {
-            NavigationView navigationView = activity.findViewById(R.id.nav_view);
-            if (navigationView != null) {
-                View headerView = navigationView.getHeaderView(0);
-                textViewNavHeader = headerView.findViewById(R.id.textView);
-            } else {
-                Log.d("LoginFragment", "navigationView is null");
-            }
-        }
+
         return binding.getRoot();
     }
 
@@ -88,7 +79,6 @@ public class LoginFragment extends Fragment {
             saveUserEmail(LoggedInUser);
             Log.d("LoginFragment", "Account: " + LoggedInUser);
             Log.d("LoginFragment", "LoggedInUser: " + LoggedInUser);
-            setNavHeaderUsername();
             navigateToHome();
             return;
         }
@@ -96,7 +86,6 @@ public class LoginFragment extends Fragment {
         saveUserEmail(LoggedInUser);
         if (!LoggedInUser.equals("")) {
             Log.d("LoginFragment", "LoggedInUser: " + LoggedInUser);
-            setNavHeaderUsername();
             navigateToHome();
             return;
         }
@@ -138,7 +127,6 @@ public class LoginFragment extends Fragment {
         }
     }
 
-
     // For the login button, check the login result and navigate to HomeFragment
     private void navigateToHome() {
         // If login is successful, navigate to HomeFragment
@@ -178,7 +166,7 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getContext(), "Google sign-in successful", Toast.LENGTH_SHORT).show();
                         LoggedInUser = account.getEmail();
                         saveUserEmail(LoggedInUser);
-                        //saveProfileImage(account.getPhotoUrl());
+                        saveProfileImage(account.getPhotoUrl());
                         setNavHeaderUsername();
                         Navigation.findNavController(requireView()).navigate(R.id.nav_home);
                     } catch (ApiException e) {
@@ -216,21 +204,23 @@ public class LoginFragment extends Fragment {
         return "";
     }
     // Set navHeader to user's profile image
-//    private void setNavHeaderProfileImage() {
-//        String url = loadProfileImage();
-//        if (getContext() != null && binding.navView != null) {
-//            // Set profile image in nav header
-//            ImageView profileImageView = binding.navView.getHeaderView(0).findViewById(R.id.imageView);
-//            Picasso.get().load(url).into(profileImageView);
-//        }
-//    }
+
 
     public void setNavHeaderUsername() {
-        if (textViewNavHeader != null) {
-            textViewNavHeader.setText(LoggedInUser);
+        Activity activity = getActivity();
+        if (activity != null) {
+            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+            if (navigationView != null) {
+                View headerView = navigationView.getHeaderView(0);
+                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
+                if (textViewNavHeader != null) {
+                    textViewNavHeader.setText(LoggedInUser);
+                }
+            }else {
+                Log.d("LoginFragment", "navigationView is null");
+            }
         }
     }
-
 
     @Override
     public void onDestroyView() {
