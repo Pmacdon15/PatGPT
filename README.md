@@ -21,13 +21,14 @@ This project is the final assignment for my Mobile Development class. It leverag
 - SQLite Database Functionality: Stores user data and history locally.
 - Profile Settings: Users can change profile picture and other settings, which are reflected in the app, particularly in the navigation menu.
 - Google Account Login: Option to log in using Google accounts
-- 
+
 > **Note**
 > Some additional features have been implemented but will be available in the next release.
 
 ## Coming Soon
 - History Sharing: Users will be able to share their history.
-. Local Users, will be able to stay logged in even if we close the app.
+- Local Users, will be able to stay logged in even if we close the app.
+- Have yout google profile image loaded in to the app. 
   
 # Setup
 
