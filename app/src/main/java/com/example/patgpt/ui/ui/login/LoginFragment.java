@@ -190,7 +190,7 @@ public class LoginFragment extends Fragment {
                         //saveUserEmail(LoggedInUser);
                         UserData.saveUserEmail(requireContext(), LoggedInUser);
                         //saveProfileImage(account.getPhotoUrl());
-                        UserData.saveProfileImage(requireContext(), Objects.requireNonNull(account.getPhotoUrl()));
+                        UserData.saveGoogleProfileImage(requireContext(), Objects.requireNonNull(account.getPhotoUrl()));
                         Navigation.findNavController(requireView()).navigate(R.id.nav_home);
                     } catch (ApiException e) {
                         // Handle sign-in failure (e.g., show error message)

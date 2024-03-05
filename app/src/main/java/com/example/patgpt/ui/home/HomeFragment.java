@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
+import com.example.patgpt.UserData;
 import com.example.patgpt.databinding.FragmentHomeBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
@@ -66,13 +67,15 @@ public class HomeFragment extends Fragment {
         // If screen rotates, restore the content of the TextViewContent
         //if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
 
-        setNavHeaderUsername();
-        setNavHeaderImage();
-        setNavHeaderGoogleImage();
+        //setNavHeaderUsername();
+        //setNavHeaderImage();
+        //setNavHeaderGoogleImage();
 
-
-
-        LoggedInUser = loadUserEmail();
+        LoggedInUser = UserData.loadUserEmail(requireContext());
+        UserData.setNavHeaderUsername(getActivity(), LoggedInUser);
+        if(!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())){
+            UserData.setNavHeaderGoogleImage(getActivity());
+        }
         Log.d("HomeFragment", "onCreateView: " + LoggedInUser);
 
         return root;
@@ -96,11 +99,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (checkForImageFile()) {
-            setNavHeaderImage();
+      UserData.setNavHeaderUsername(getActivity(), LoggedInUser);
+        if(!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())){
+            UserData.setNavHeaderGoogleImage(getActivity());
         }
-        setNavHeaderGoogleImage();
-        setNavHeaderUsername();
     }
 
 
@@ -216,58 +218,58 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public boolean checkForImageFile() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            String fileName = LoggedInUser + "profileImage.jpg";
-            Log.d("File Check", "Checking for " + fileName);
-            if (fileName.equals("profileImage.jpg")) {
-                // Do not load the image this is from Earlier iterations before loginViewModel.profileUsername was implemented
-                Log.d("File Check", "No profile image to load");
-                return false;
-            }
-            File file = activity.getFileStreamPath(fileName);
-            if (file == null || !file.exists()) {
-                Log.d("File Check", fileName + " does not exist.");
-            } else {
-                Log.d("File Check", fileName + " exists.");
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean checkForImageFile() {
+//        Activity activity = getActivity();
+//        if (activity != null) {
+//            String fileName = LoggedInUser + "profileImage.jpg";
+//            Log.d("File Check", "Checking for " + fileName);
+//            if (fileName.equals("profileImage.jpg")) {
+//                // Do not load the image this is from Earlier iterations before loginViewModel.profileUsername was implemented
+//                Log.d("File Check", "No profile image to load");
+//                return false;
+//            }
+//            File file = activity.getFileStreamPath(fileName);
+//            if (file == null || !file.exists()) {
+//                Log.d("File Check", fileName + " does not exist.");
+//            } else {
+//                Log.d("File Check", fileName + " exists.");
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-    public void setNavHeaderImage() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            File file = activity.getFileStreamPath(LoggedInUser + "profileImage.jpg");
-            if (file.exists()) {
-                Uri imageUri = Uri.fromFile(file);
-                NavigationView navigationView = activity.findViewById(R.id.nav_view);
-                if (navigationView != null) {
-                    View headerView = navigationView.getHeaderView(0);
-                    ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
-                    if (imageViewNavHeader != null) {
-                        Log.d("HomeFragment", "Setting nav header image" + imageUri);
-                        imageViewNavHeader.setImageURI(imageUri);
-                    }
-                }
-            }
-        }
-    }
+//    public void setNavHeaderImage() {
+//        Activity activity = getActivity();
+//        if (activity != null) {
+//            File file = activity.getFileStreamPath(LoggedInUser + "profileImage.jpg");
+//            if (file.exists()) {
+//                Uri imageUri = Uri.fromFile(file);
+//                NavigationView navigationView = activity.findViewById(R.id.nav_view);
+//                if (navigationView != null) {
+//                    View headerView = navigationView.getHeaderView(0);
+//                    ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
+//                    if (imageViewNavHeader != null) {
+//                        Log.d("HomeFragment", "Setting nav header image" + imageUri);
+//                        imageViewNavHeader.setImageURI(imageUri);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-    private String loadProfileImage() {
-        if (getContext() != null) {
-            return getContext().getSharedPreferences("LoggedInUser", 0).getString("profileImage", "");
-        }
-        return "";
-    }
+//    private String loadProfileImage() {
+//        if (getContext() != null) {
+//            return getContext().getSharedPreferences("LoggedInUser", 0).getString("profileImage", "");
+//        }
+//        return "";
+//    }
 
     // Set navHeader to user's profile image using Picasso and loadProfileImage()
     private void setNavHeaderGoogleImage() {
         Activity activity = getActivity();
         if (activity != null) {
-            String profileImageUrl = loadProfileImage();
+            String profileImageUrl = UserData.loadGoogleProfileImage(activity);
             if (!profileImageUrl.isEmpty()) {
                 NavigationView navigationView = activity.findViewById(R.id.nav_view);
                 if (navigationView != null) {
@@ -282,29 +284,29 @@ public class HomeFragment extends Fragment {
     }
 
     // Set navHeader to user's name
-    public void setNavHeaderUsername() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            NavigationView navigationView = activity.findViewById(R.id.nav_view);
-            if (navigationView != null) {
-                View headerView = navigationView.getHeaderView(0);
-                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
-                if (textViewNavHeader != null) {
-                    textViewNavHeader.setText(LoggedInUser);
-                }
-            } else {
-                Log.d("HomeFragment", "navigationView is null");
-            }
-        }
-    }
-
-    // Get LoggedInUser from SharedPreferences
-    public String loadUserEmail() {
-        if (getContext() != null) {
-            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
-        }
-        return "";
-    }
+//    public void setNavHeaderUsername() {
+//        Activity activity = getActivity();
+//        if (activity != null) {
+//            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+//            if (navigationView != null) {
+//                View headerView = navigationView.getHeaderView(0);
+//                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
+//                if (textViewNavHeader != null) {
+//                    textViewNavHeader.setText(LoggedInUser);
+//                }
+//            } else {
+//                Log.d("HomeFragment", "navigationView is null");
+//            }
+//        }
+//    }
+//
+//    // Get LoggedInUser from SharedPreferences
+//    public String loadUserEmail() {
+//        if (getContext() != null) {
+//            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
+//        }
+//        return "";
+//    }
 
     @Override
     public void onDestroyView() {
