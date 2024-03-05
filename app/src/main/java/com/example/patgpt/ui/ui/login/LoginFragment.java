@@ -2,7 +2,7 @@ package com.example.patgpt.ui.ui.login;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.lifecycle.ViewModelProvider;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -13,15 +13,14 @@ import androidx.navigation.Navigation;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+
 import android.widget.Toast;
 
 import com.example.patgpt.DatabaseHelper;
@@ -34,16 +33,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-//import com.example.patgpt.ui.ui.login.LoginViewModel;
 
 public class LoginFragment extends Fragment {
-//    private GoogleSignInClient gsc;
-    private LoginViewModel loginViewModel;
+
+    private GoogleSignInClient signInClient;
     private FragmentLoginBinding binding;
     private DatabaseHelper databaseHelper;
     public static String newUserName = "";
     public static String LoggedInUser = "";
-
 
 
     @Nullable
@@ -52,6 +49,13 @@ public class LoginFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        signInClient = GoogleSignIn.getClient(requireContext(), gso);
+
+
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -59,6 +63,16 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Check if user is already logged in
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
+        if (account != null) {
+            // User is already logged in, navigate to the home activity directly
+            LoginFragment.LoggedInUser = account.getEmail();
+            navigateToHome();
+            return;
+        }
+
 
         databaseHelper = new DatabaseHelper(getContext());
         EditText usernameEditText = view.findViewById(R.id.username);
@@ -82,12 +96,12 @@ public class LoginFragment extends Fragment {
 
     public void signIn(String username, String password) {
         // check if you can remove nesting with return later
-        if(databaseHelper.checkUser(username, password)){
+        if (databaseHelper.checkUser(username, password)) {
             LoggedInUser = username;
             navigateToHome();
         } else {
             showLoginFailed(R.string.login_failed);
-            if(!databaseHelper.doesUserExist(username)){
+            if (!databaseHelper.doesUserExist(username)) {
                 newUserName = username;
                 navigateToRegistration();
             }
@@ -110,7 +124,6 @@ public class LoginFragment extends Fragment {
     }
 
 
-
     private void showLoginFailed(@StringRes Integer errorString) {
         if (getContext() != null && getContext().getApplicationContext() != null) {
             Toast.makeText(
@@ -121,11 +134,6 @@ public class LoginFragment extends Fragment {
     }
 
     public void signInWithGoogle() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        GoogleSignInClient signInClient = GoogleSignIn.getClient(requireContext(), gso);
         Intent signInIntent = signInClient.getSignInIntent();
         signInLauncher.launch(signInIntent); // Launch the sign-in activity
     }

@@ -18,15 +18,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-//import androidx.lifecycle.ViewModelProvider;
+
 
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
 import com.example.patgpt.databinding.FragmentHomeBinding;
 import com.example.patgpt.ui.ui.login.LoginFragment;
-import com.example.patgpt.ui.ui.login.LoginViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -56,9 +53,6 @@ public class HomeFragment extends Fragment {
     private TextView textViewContent;
     private EditText editTextPrompt;
     private FragmentHomeBinding binding;
-    private GoogleSignInOptions gso;
-    private GoogleSignInClient gsc;
-
     private Uri imageUri;
     private String imageUrl;
 
@@ -73,20 +67,21 @@ public class HomeFragment extends Fragment {
         textViewContent = root.findViewById(R.id.textView_Content);
         editTextPrompt = root.findViewById(R.id.editText_Prompt);
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        gsc = GoogleSignIn.getClient(requireContext(), gso);
+        GoogleSignInClient gsc = GoogleSignIn.getClient(requireContext(), gso);
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
         if (account != null) {
             Log.d("GoogleSignIn", "User is signed in");
-            LoginViewModel.profileUsername = account.getEmail();
-            Log.d("GoogleSignIn", "Username: " + LoginViewModel.profileUsername);
+            LoginFragment.LoggedInUser = account.getEmail();
+            Log.d("GoogleSignIn", "Username: " + LoginFragment.LoggedInUser);
             imageUrl = Objects.requireNonNull(account.getPhotoUrl()).toString();
         } else {
             Log.d("GoogleSignIn", "User is not signed in");
         }
+
 
         buttonSend.setOnClickListener(view -> makeApiRequest());
         textViewContent.setOnClickListener(this::shareContent);
@@ -217,7 +212,7 @@ public class HomeFragment extends Fragment {
 
     public void saveHistory(String content) {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getActivity())) {
-            if (databaseHelper.addHistoryForUser(LoginViewModel.profileUsername, content)) {
+            if (databaseHelper.addHistoryForUser(LoginFragment.LoggedInUser, content)) {
                 Log.d("HistoryFragment", "History added successfully");
             }
             // Else log an error message
@@ -229,7 +224,7 @@ public class HomeFragment extends Fragment {
     public boolean checkForImageFile() {
         Activity activity = getActivity();
         if (activity != null) {
-            String fileName = LoginViewModel.profileUsername + "profileImage.jpg";
+            String fileName = LoginFragment.LoggedInUser + "profileImage.jpg";
             if (fileName.equals("profileImage.jpg")) {
                 // Do not load the image this is from Earlier iterations before loginViewModel.profileUsername was implemented
                 Log.d("File Check", "No profile image to load");
@@ -249,7 +244,7 @@ public class HomeFragment extends Fragment {
     public void setNavHeaderImage() {
         Activity activity = getActivity();
         if (activity != null) {
-            File file = activity.getFileStreamPath(LoginViewModel.profileUsername + "profileImage.jpg");
+            File file = activity.getFileStreamPath(LoginFragment.LoggedInUser + "profileImage.jpg");
             if (file.exists()) {
                 Uri imageUri = Uri.fromFile(file);
                 NavigationView navigationView = activity.findViewById(R.id.nav_view);

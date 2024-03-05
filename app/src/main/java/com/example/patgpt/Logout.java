@@ -10,31 +10,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.patgpt.databinding.FragmentHomeBinding;
-import com.example.patgpt.ui.data.LoginRepository;
-import com.example.patgpt.ui.ui.login.LoginViewModel;
+import com.example.patgpt.ui.ui.login.LoginFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.example.patgpt.ui.data.LoginDataSource;
+
+
 
 public class Logout extends Fragment {
-
-    private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
-
-    private LoginRepository loginRepository;
 
     public Logout() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,14 +34,12 @@ public class Logout extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_logout, container, false);
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         gsc = GoogleSignIn.getClient(requireContext(), gso);
 
 
-        // Initialize LoginRepository
-        loginRepository = LoginRepository.getInstance(new LoginDataSource(requireContext()));
 
         signOut();
 
@@ -63,18 +53,14 @@ public class Logout extends Fragment {
     }
 
     public void signOut() {
-        LoginViewModel.profileUsername = "";
-        loginRepository.logout();
-        gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    navigateToLogin();
-                } else {
-                    // Handle sign-out failure
-                    Log.d("Logout", "Sign out failed: " + task.getException());
-                    // Optionally display a toast or some UI feedback to the user
-                }
+        LoginFragment.LoggedInUser = "";
+        gsc.signOut().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                navigateToLogin();
+            } else {
+                // Handle sign-out failure
+                Log.d("Logout", "Sign out failed: " + task.getException());
+                // Optionally display a toast or some UI feedback to the user
             }
         });
     }

@@ -66,6 +66,7 @@ public class RegistrationFragment extends Fragment {
         }
         databaseHelper = new DatabaseHelper(getActivity());
         if (databaseHelper.addUser(LoginFragment.newUserName,first_name, last_name, pass)) {
+            LoginFragment.LoggedInUser = LoginFragment.newUserName;
             Toast.makeText(getActivity(), "User Registered", Toast.LENGTH_SHORT).show();
             navigateToHome();
         } else {

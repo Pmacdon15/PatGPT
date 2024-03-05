@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.HistoryDB;
 import com.example.patgpt.R;
-import com.example.patgpt.ui.ui.login.LoginViewModel;
+import com.example.patgpt.ui.ui.login.LoginFragment;
 
 public class HistoryFragment extends Fragment {
     private DatabaseHelper databaseHelper;
@@ -32,7 +32,7 @@ public class HistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         assignViews(view); // Call assignViews() before accessing textViewContent
         databaseHelper = new DatabaseHelper(getActivity());
-        UserEmail = LoginViewModel.profileUsername;
+        UserEmail = LoginFragment.LoggedInUser;
         textViewContent.setText(loadHistoryForUser());
         assignButton(view);
         clearHistoryButton.setOnClickListener(v -> clearHistory());
