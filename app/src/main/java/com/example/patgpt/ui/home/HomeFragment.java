@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment {
         }
 
         Log.d("HomeFragment", "onCreateView: " + LoginFragment.LoggedInUser);
-        setNavHeaderUsername();
+        //setNavHeaderUsername();
         return root;
     }
 
@@ -89,6 +89,15 @@ public class HomeFragment extends Fragment {
             textViewContent.setText(savedContent);
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(checkForImageFile()) {
+            setNavHeaderImage();
+        }
+        //setNavHeaderUsername();
+    }
+
 
     private String getAPIKey(Context context) {
         //Log.d("API_KEY", context.getString(R.string.API_KEY));
@@ -252,14 +261,6 @@ public class HomeFragment extends Fragment {
                 }
             }
         }
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(checkForImageFile()) {
-            setNavHeaderImage();
-        }
-        setNavHeaderUsername();
     }
 
 

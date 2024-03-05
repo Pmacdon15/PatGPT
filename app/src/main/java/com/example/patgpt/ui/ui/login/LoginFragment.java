@@ -12,6 +12,7 @@ import androidx.navigation.Navigation;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -22,6 +23,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.patgpt.DatabaseHelper;
@@ -33,6 +36,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 
 public class LoginFragment extends Fragment {
@@ -108,6 +113,7 @@ public class LoginFragment extends Fragment {
         if (databaseHelper.checkUser(username, password)) {
             LoggedInUser = username;
             saveUserEmail(LoggedInUser);
+            setNavHeaderUsername();
             navigateToHome();
         } else {
             showLoginFailed(R.string.login_failed);
@@ -159,6 +165,8 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getContext(), "Google sign-in successful", Toast.LENGTH_SHORT).show();
                         LoggedInUser = account.getEmail();
                         saveUserEmail(LoggedInUser);
+                        //saveProfileImage(account.getPhotoUrl());
+                        setNavHeaderUsername();
                         Navigation.findNavController(requireView()).navigate(R.id.nav_home);
                     } catch (ApiException e) {
                         // Handle sign-in failure (e.g., show error message)
@@ -174,6 +182,12 @@ public class LoginFragment extends Fragment {
             getContext().getSharedPreferences("LoggedInUser", 0).edit().putString("email", email).apply();
         }
     }
+    // Save uri for profile image to SharedPreferences
+    private void saveProfileImage(Uri url) {
+        if (getContext() != null) {
+            getContext().getSharedPreferences("LoggedInUserProfileImage", 0).edit().putString("profileImage", url.toString()).apply();
+        }
+    }
     // Load user's email from SharedPreferences
     private String loadUserEmail() {
         if (getContext() != null) {
@@ -181,6 +195,39 @@ public class LoginFragment extends Fragment {
         }
         return "";
     }
+    // Load uri for profile image from SharedPreferences
+    private String loadProfileImage() {
+        if (getContext() != null) {
+            return getContext().getSharedPreferences("LoggedInUserProfileImage", 0).getString("profileImage", "");
+        }
+        return "";
+    }
+    // Set navHeader to user's profile image
+//    private void setNavHeaderProfileImage() {
+//        String url = loadProfileImage();
+//        if (getContext() != null && binding.navView != null) {
+//            // Set profile image in nav header
+//            ImageView profileImageView = binding.navView.getHeaderView(0).findViewById(R.id.imageView);
+//            Picasso.get().load(url).into(profileImageView);
+//        }
+//    }
+
+    public void setNavHeaderUsername() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+            if (navigationView != null) {
+                View headerView = navigationView.getHeaderView(0);
+                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
+                if (textViewNavHeader != null) {
+                    textViewNavHeader.setText(loadUserEmail());
+                }
+            }else {
+                Log.d("LoginFragment", "navigationView is null");
+            }
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
