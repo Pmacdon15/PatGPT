@@ -22,12 +22,14 @@ This project is the final assignment for my Mobile Development class. It leverag
 - Profile Settings: Users can change profile picture and other settings, which are reflected in the app, particularly in the navigation menu.
 - Google Account Login: Option to log in using Google accounts
 - Local Users, stayed logged in even if they close the app.
+- Have your google profile image loaded in to the app.
+    
 > **Note**
 > Some additional features have been implemented but will be available in the next release.
 
 ## Coming Soon
 - History Sharing: Users will be able to share their history.
-- Have your google profile image loaded in to the app. 
+ 
   
 # Setup
 
@@ -57,5 +59,7 @@ The app has been tested on a real device (Note 20 Ultra) and the Pixel_3a_API_34
 # Acknowledgments
 I have used icons from https://www.flaticon.com/free-icons/
 
+> **Note**
+> Profile page removed for google users. When using a google account only your e mail, profile image and and history are are stored locally and can be cleared. 
 
   
