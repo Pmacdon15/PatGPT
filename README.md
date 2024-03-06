@@ -49,9 +49,15 @@ This project is the final assignment for my Mobile Development class. It leverag
 ```
 5. Replace "Put your API key here" with your actual API Key.
 
-6. For google login to work you must register a google console app, with your apps information. 
+6. For google login to work you must register a google console app, with your apps information. If you are using this app in the emulator use the SHA1 key from the debugger, in signing rport. Other words use Android studio to Generate a key(.jsk) then use this command to reveal the SHA1 key.
 
-7. You can now use the built-in emulator or build your own APK.
+ ```pwoershell
+keytool -list -v -keystore "keystoreandfilepath.jsk"  -alias keyAlias
+```
+
+Replacing "keystorefileamdfilepath" with your keystore .jskfile and path, and replaceing keyAlias with the keys alias. You will also need the package name and app name.
+
+8. You can now use the built-in emulator or build your own APK.
 
 # Emulators
 The app has been tested on a real device (Note 20 Ultra) and the Pixel_3a_API_34 emulator in Android Studio. The layout, using vertical constraints as the parent layout, has been tested on these devices and found to work well..
