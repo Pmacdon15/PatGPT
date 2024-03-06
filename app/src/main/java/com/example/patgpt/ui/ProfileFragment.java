@@ -30,17 +30,16 @@ import com.example.patgpt.R;
 import com.example.patgpt.UserData;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
 
 
 public class ProfileFragment extends Fragment {
-
     public ProfileFragment() {
         // Required empty public constructor
     }
-
     private ImageView imageViewProfile;
     private TextView textviewFirstName;
     private EditText editTextFirstName;
@@ -58,8 +57,9 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
-        initializeViews(root);
         LoggedInUser = UserData.loadUserEmail(requireContext());
+        initializeViews(root);
+        setProfileImage();
         Log.d("ProfileFragment","LoggedInUser "+ LoggedInUser);
 
         return root;
@@ -100,7 +100,7 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    // Set Profile Image
+    // Set Profile page Image
     public void loadImageToProfile(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         imageSelector.launch(intent);
@@ -144,32 +144,24 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    // Set The Image view
-//    public void setProfileImage() {
-//        Activity activity = getActivity();
-//        if (activity != null) {
-//            File file = activity.getFileStreamPath(LoggedInUser + "profileImage.jpg");
-//            if (file.exists()) {
-//                Uri imageUri = Uri.fromFile(file);
-//                imageViewProfile.setImageURI(imageUri);
-//            }
-//        }
-//    }
-
     // Set The Text views
     private void SetFirstNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
             String currentFirstName = databaseHelper.getFirstName(LoggedInUser);
             Log.d("currentFirstName", currentFirstName);
             textviewFirstName.setText(currentFirstName);
+            
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
+
     }
 
     private void SetLastNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
+            Log.d("LoggedInUser inside of SetLastNameTextView()", LoggedInUser);
             String currentLastName = databaseHelper.getLastName(LoggedInUser);
+            Log.d("currentLastName", currentLastName);
             textviewLastName.setText(currentLastName);
         } catch (Exception e) {
             Log.e("Error", "An error occurred while accessing the database", e);
@@ -185,6 +177,7 @@ public class ProfileFragment extends Fragment {
                 Log.d("Maintenance", "First Name Updated");
                 Log.d("newFirstName", newFirstName);
                 textviewFirstName.setText(newFirstName);
+                editTextFirstName.setText("");
                 Toast.makeText(getContext(), "First Name Updated", Toast.LENGTH_SHORT).show();
             } else {
                 Log.d("Maintenance", "First Name Not Updated");
@@ -202,6 +195,7 @@ public class ProfileFragment extends Fragment {
                 Log.d("Maintenance", "Last Name Updated");
                 Log.d("newLastName", newLastName);
                 textviewLastName.setText(newLastName);
+                editTextLastName.setText("");
                 Toast.makeText(getContext(), "Last Name Updated", Toast.LENGTH_SHORT).show();
             } else {
                 Log.d("Maintenance", "Last Name Not Updated");
@@ -219,6 +213,9 @@ public class ProfileFragment extends Fragment {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
             if (databaseHelper.editUserPasswordDB(LoggedInUser, currentPassword, newPassword, confirmPassword)) {
                 Log.d("Maintenance", "Password Updated");
+                editTextPassword_Current.setText("");
+                editTextPassword_New.setText("");
+                editTextPassword_Confirm.setText("");
                 Toast.makeText(getContext(), "Password Updated", Toast.LENGTH_SHORT).show();
             } else {
                 Log.d("Maintenance", "Password Not Updated");
@@ -226,12 +223,17 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-//    private String loadUserEmail() {
-//        if (getContext() != null) {
-//            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
-//        }
-//        return "";
-//    }
+
+    public void setProfileImage() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            File file = activity.getFileStreamPath(LoggedInUser + "profileImage.jpg");
+            if (file.exists()) {
+                Uri imageUri = Uri.fromFile(file);
+                imageViewProfile.setImageURI(imageUri);
+            }
+        }
+    }
 
     @Override
     public void onDestroy() {
