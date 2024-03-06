@@ -22,7 +22,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 
 public class Logout extends Fragment {
-    private GoogleSignInClient gsc;
 
     public Logout() {
         // Required empty public constructor
@@ -33,11 +32,6 @@ public class Logout extends Fragment {
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_logout, container, false);
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        gsc = GoogleSignIn.getClient(requireContext(), gso);
 
 
         signOut();
@@ -52,8 +46,20 @@ public class Logout extends Fragment {
     }
 
     public void signOut() {
-        deleteSharedPreferencesLoggedInUser();
-        resetNavHeaderImage();
+        //deleteSharedPreferencesLoggedInUser();
+        //resetNavHeaderImage();
+        UserData.clearSharedPreference(requireActivity());
+        googleSignOut();
+        UserData.resetNavHeaderImage(requireActivity());
+
+    }
+
+    public void googleSignOut() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        GoogleSignInClient gsc = GoogleSignIn.getClient(requireContext(), gso);
+
 
         gsc.signOut().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -72,25 +78,24 @@ public class Logout extends Fragment {
     }
 
     // Delete shared preferences loggedInUser
-    public void deleteSharedPreferencesLoggedInUser() {
+//    public void deleteSharedPreferencesLoggedInUser() {
+//        requireActivity().getSharedPreferences("LoggedInUser", 0).edit().clear().apply();
+//
+//    }
 
-        requireActivity().getSharedPreferences("LoggedInUser", 0).edit().clear().apply();
-
-    }
-
-    public void resetNavHeaderImage() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            NavigationView navigationView = activity.findViewById(R.id.nav_view);
-            if (navigationView != null) {
-                View headerView = navigationView.getHeaderView(0);
-                ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
-                if (imageViewNavHeader != null) {
-                    imageViewNavHeader.setImageResource(R.mipmap.ic_launcher_round);
-                }
-            }
-        }
-    }
+//    public void resetNavHeaderImage() {
+//        Activity activity = getActivity();
+//        if (activity != null) {
+//            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+//            if (navigationView != null) {
+//                View headerView = navigationView.getHeaderView(0);
+//                ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
+//                if (imageViewNavHeader != null) {
+//                    imageViewNavHeader.setImageResource(R.mipmap.ic_launcher_round);
+//                }
+//            }
+//        }
+//    }
 
 
     @Override

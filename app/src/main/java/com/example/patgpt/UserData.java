@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
@@ -116,12 +114,27 @@ public class UserData {
             }
         }
     }
+    public static void resetNavHeaderImage(Activity activity){
+        if (activity != null) {
+            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+            if (navigationView != null) {
+                View headerView = navigationView.getHeaderView(0);
+                ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
+                if (imageViewNavHeader != null) {
+                    imageViewNavHeader.setImageResource(R.mipmap.ic_launcher_round);
+                }
+            }
+        }
+    }
 
     // Clear user's email from SharedPreferences
-    public static void clearUserEmail(Context context) {
+    public static void clearSharedPreference(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(KEY_EMAIL);
+        editor.clear();
         editor.apply();
     }
+
+
+
 }
