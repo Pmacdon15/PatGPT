@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,12 +22,13 @@ public class UserData {
     private static final String KEY_PROFILEIMAGE_GOOGLE = "profileImage";
 
     public static void setNavHeaders(Activity activity) {
-       String loggedInUser = UserData.loadUserEmail(activity);
+        String loggedInUser = UserData.loadUserEmail(activity);
         UserData.setNavHeaderUsername(activity, loggedInUser);
         if (!UserData.checkForImageFileAndSetNavHeaderImage(activity)) {
             UserData.setNavHeaderGoogleImage(activity);
         }
     }
+
     // Save user's email to SharedPreferences
     public static void saveUserEmail(Context context, String email) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -58,6 +61,7 @@ public class UserData {
                     View headerView = navigationView.getHeaderView(0);
                     ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
                     if (imageViewNavHeader != null) {
+                        removeProfileNavItem(activity);
                         Picasso.get().load(profileImageUrl).into(imageViewNavHeader);
                     }
                 }
@@ -100,7 +104,7 @@ public class UserData {
     }
 
     // Set username in the navigation header
-    public static void setNavHeaderUsername (Activity activity, String username){
+    public static void setNavHeaderUsername(Activity activity, String username) {
         if (activity != null) {
             NavigationView navigationView = activity.findViewById(R.id.nav_view);
             if (navigationView != null) {
@@ -114,15 +118,41 @@ public class UserData {
             }
         }
     }
-    public static void resetNavHeaderImage(Activity activity){
+
+    public static void resetNavHeaderImage(Activity activity) {
         if (activity != null) {
             NavigationView navigationView = activity.findViewById(R.id.nav_view);
             if (navigationView != null) {
                 View headerView = navigationView.getHeaderView(0);
                 ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
                 if (imageViewNavHeader != null) {
+                    addProfileNavItem(activity);
                     imageViewNavHeader.setImageResource(R.mipmap.ic_launcher_round);
                 }
+            }
+        }
+    }
+    // Add profile navigation item to the navigation drawer
+    public static void addProfileNavItem(Activity activity) {
+        if (activity != null) {
+            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+            if (navigationView != null) {
+                Menu menu = navigationView.getMenu();
+                MenuItem profileItem = menu.findItem(R.id.nav_profile);
+                profileItem.setVisible(true);
+            }
+        }else {
+            Log.d("UserData", "Activity is null");
+        }
+    }
+    // Remove profile navigation item from the navigation drawer
+    public static void removeProfileNavItem(Activity activity) {
+        if (activity != null) {
+            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+            if (navigationView != null) {
+                Menu menu = navigationView.getMenu();
+                MenuItem profileItem = menu.findItem(R.id.nav_profile);
+                profileItem.setVisible(false);
             }
         }
     }
@@ -134,7 +164,6 @@ public class UserData {
         editor.clear();
         editor.apply();
     }
-
 
 
 }

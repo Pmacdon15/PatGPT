@@ -12,7 +12,6 @@ import androidx.navigation.Navigation;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -116,6 +115,7 @@ public class LoginFragment extends Fragment {
         });
 
     }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -135,12 +135,14 @@ public class LoginFragment extends Fragment {
             passwordEditText.setText(savedInstanceState.getString("password"));
         }
     }
+
     public void signIn(String username, String password) {
         // check if you can remove nesting with return later
         if (databaseHelper.checkUser(username, password)) {
             LoggedInUser = username;
             //saveUserEmail(LoggedInUser);
             UserData.saveUserEmail(requireContext(), LoggedInUser);
+            //UserData.addProfileNavItem(requireActivity());
             navigateToHome();
         } else {
             showLoginFailed(R.string.login_failed);
@@ -151,12 +153,14 @@ public class LoginFragment extends Fragment {
 
         }
     }
+
     // For the login button, check the login result and navigate to HomeFragment
     private void navigateToHome() {
         // If login is successful, navigate to HomeFragment
         NavController navController = Navigation.findNavController(requireView());
         navController.navigate(R.id.nav_home);
     }
+
     private void navigateToRegistration() {
         // If login is successful, navigate to HomeFragment
         NavController navController = Navigation.findNavController(requireView());
@@ -186,10 +190,11 @@ public class LoginFragment extends Fragment {
                     try {
                         GoogleSignInAccount account = task.getResult(ApiException.class);
                         Toast.makeText(getContext(), "Google sign-in successful", Toast.LENGTH_SHORT).show();
+                        // Signed in successfully, show authenticated UI.
                         LoggedInUser = account.getEmail();
-                        //saveUserEmail(LoggedInUser);
+                        // Save users e mail to shared preferences
                         UserData.saveUserEmail(requireContext(), LoggedInUser);
-                        //saveProfileImage(account.getPhotoUrl());
+                        // Save uri for profile image to shared preferences
                         UserData.saveGoogleProfileImage(requireContext(), Objects.requireNonNull(account.getPhotoUrl()));
                         Navigation.findNavController(requireView()).navigate(R.id.nav_home);
                     } catch (ApiException e) {
@@ -200,25 +205,6 @@ public class LoginFragment extends Fragment {
             }
     );
 
-    // Save user's email to SharedPreferences
-    private void saveUserEmail(String email) {
-        if (getContext() != null) {
-            getContext().getSharedPreferences("LoggedInUser", 0).edit().putString("email", email).apply();
-        }
-    }
-    // Save uri for profile image to SharedPreferences
-    private void saveProfileImage(Uri url) {
-        if (getContext() != null) {
-            getContext().getSharedPreferences("LoggedInUser", 0).edit().putString("profileImage", url.toString()).apply();
-        }
-    }
-    // Load user's email from SharedPreferences
-    private String loadUserEmail() {
-        if (getContext() != null) {
-            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
-        }
-        return "";
-    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

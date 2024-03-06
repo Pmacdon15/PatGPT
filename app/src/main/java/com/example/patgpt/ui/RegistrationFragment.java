@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
+import com.example.patgpt.UserData;
 import com.example.patgpt.ui.ui.login.LoginFragment;
 
 public class RegistrationFragment extends Fragment {
@@ -67,13 +68,12 @@ public class RegistrationFragment extends Fragment {
         }
         databaseHelper = new DatabaseHelper(getActivity());
         if (databaseHelper.addUser(LoginFragment.newUserName, first_name, last_name, pass)) {
-            saveUserEmail(LoginFragment.newUserName);
+            UserData.saveUserEmail(requireContext(),LoginFragment.newUserName);
             Toast.makeText(getActivity(), "User Registered", Toast.LENGTH_SHORT).show();
             navigateToHome();
         } else {
             Toast.makeText(getActivity(), "User not Registered", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     public boolean confirmPasswordsMatch() {
@@ -91,9 +91,4 @@ public class RegistrationFragment extends Fragment {
         navController.navigate(R.id.nav_home);
     }
 
-    private void saveUserEmail(String email) {
-        if (getContext() != null) {
-            getContext().getSharedPreferences("LoggedInUser", 0).edit().putString("email", email).apply();
-        }
-    }
 }
