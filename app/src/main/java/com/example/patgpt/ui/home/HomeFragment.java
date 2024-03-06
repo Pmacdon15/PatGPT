@@ -3,7 +3,6 @@ package com.example.patgpt.ui.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,11 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 
 import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
@@ -31,7 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -51,7 +47,6 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private String LoggedInUser;
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -64,18 +59,9 @@ public class HomeFragment extends Fragment {
 
         buttonSend.setOnClickListener(view -> makeApiRequest());
         textViewContent.setOnClickListener(this::shareContent);
-        // If screen rotates, restore the content of the TextViewContent
-        //if (savedInstanceState != null) onViewStateRestored(savedInstanceState);
-
-        //setNavHeaderUsername();
-        //setNavHeaderImage();
-        //setNavHeaderGoogleImage();
-
+        // Set the User
         LoggedInUser = UserData.loadUserEmail(requireContext());
-        UserData.setNavHeaderUsername(getActivity(), LoggedInUser);
-        if(!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())){
-            UserData.setNavHeaderGoogleImage(getActivity());
-        }
+
         Log.d("HomeFragment", "onCreateView: " + LoggedInUser);
 
         return root;
@@ -99,10 +85,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-      UserData.setNavHeaderUsername(getActivity(), LoggedInUser);
-        if(!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())){
-            UserData.setNavHeaderGoogleImage(getActivity());
-        }
+        UserData.setNavHeaders(getActivity());
     }
 
 

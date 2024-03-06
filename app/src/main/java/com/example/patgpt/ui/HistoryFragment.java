@@ -15,7 +15,6 @@ import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.HistoryDB;
 import com.example.patgpt.R;
 import com.example.patgpt.UserData;
-import com.example.patgpt.ui.ui.login.LoginFragment;
 
 public class HistoryFragment extends Fragment {
     private DatabaseHelper databaseHelper;
@@ -44,10 +43,7 @@ public class HistoryFragment extends Fragment {
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         LoggedInUser = UserData.loadUserEmail(requireContext());
-        UserData.setNavHeaderUsername(getActivity(), LoggedInUser);
-        if(!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())){
-            UserData.setNavHeaderGoogleImage(getActivity());
-        }
+        UserData.setNavHeaders(getActivity());
     }
 
     public void assignViews(View view) {

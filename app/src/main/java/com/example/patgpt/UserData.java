@@ -21,6 +21,13 @@ public class UserData {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PROFILEIMAGE_GOOGLE = "profileImage";
 
+    public static void setNavHeaders(Activity activity) {
+       String loggedInUser = UserData.loadUserEmail(activity);
+        UserData.setNavHeaderUsername(activity, loggedInUser);
+        if (!UserData.checkForImageFileAndSetNavHeaderImage(activity)) {
+            UserData.setNavHeaderGoogleImage(activity);
+        }
+    }
     // Save user's email to SharedPreferences
     public static void saveUserEmail(Context context, String email) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

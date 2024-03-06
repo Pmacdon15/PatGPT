@@ -23,7 +23,6 @@ public class AboutFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,9 +33,6 @@ public class AboutFragment extends Fragment {
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         // Set the username in the navigation header and set the image if it exists or set the google image
-        UserData.setNavHeaderUsername(getActivity(), UserData.loadUserEmail(requireContext()));
-        if (!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())) {
-            UserData.setNavHeaderGoogleImage(getActivity());
-        }
+        UserData.setNavHeaders(getActivity());
     }
 }

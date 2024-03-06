@@ -91,11 +91,7 @@ public class DalleFragment extends Fragment {
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         // Set the username in the navigation header and set the profile image
-        String loggedInUser = UserData.loadUserEmail(requireContext());
-        UserData.setNavHeaderUsername(getActivity(), loggedInUser);
-        if(!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())){
-            UserData.setNavHeaderGoogleImage(getActivity());
-        }
+        UserData.setNavHeaders(getActivity());
 
         // Restore the url of the imageViewContent
         if (savedInstanceState != null) {

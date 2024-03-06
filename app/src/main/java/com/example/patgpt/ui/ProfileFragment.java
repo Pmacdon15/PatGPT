@@ -30,7 +30,6 @@ import com.example.patgpt.R;
 import com.example.patgpt.UserData;
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
@@ -69,10 +68,8 @@ public class ProfileFragment extends Fragment {
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         LoggedInUser = UserData.loadUserEmail(requireContext());
-        UserData.setNavHeaderUsername(getActivity(), LoggedInUser);
-        if(!UserData.checkForImageFileAndSetNavHeaderImage(getActivity())){
-            UserData.setNavHeaderGoogleImage(getActivity());
-        }
+        // Set the username in the navigation header and set the image if it exists or set the google image
+        UserData.setNavHeaders(getActivity());
     }
 
     private void initializeViews(View rootView) {
