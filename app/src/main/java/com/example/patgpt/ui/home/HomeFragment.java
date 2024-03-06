@@ -1,6 +1,5 @@
 package com.example.patgpt.ui.home;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,8 +19,7 @@ import com.example.patgpt.DatabaseHelper;
 import com.example.patgpt.R;
 import com.example.patgpt.UserData;
 import com.example.patgpt.databinding.FragmentHomeBinding;
-import com.google.android.material.navigation.NavigationView;
-import com.squareup.picasso.Picasso;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -249,22 +246,22 @@ public class HomeFragment extends Fragment {
 //    }
 
     // Set navHeader to user's profile image using Picasso and loadProfileImage()
-    private void setNavHeaderGoogleImage() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            String profileImageUrl = UserData.loadGoogleProfileImage(activity);
-            if (!profileImageUrl.isEmpty()) {
-                NavigationView navigationView = activity.findViewById(R.id.nav_view);
-                if (navigationView != null) {
-                    View headerView = navigationView.getHeaderView(0);
-                    ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
-                    if (imageViewNavHeader != null) {
-                        Picasso.get().load(profileImageUrl).into(imageViewNavHeader);
-                    }
-                }
-            }
-        }
-    }
+//    private void setNavHeaderGoogleImage() {
+//        Activity activity = getActivity();
+//        if (activity != null) {
+//            String profileImageUrl = UserData.loadGoogleProfileImage(activity);
+//            if (!profileImageUrl.isEmpty()) {
+//                NavigationView navigationView = activity.findViewById(R.id.nav_view);
+//                if (navigationView != null) {
+//                    View headerView = navigationView.getHeaderView(0);
+//                    ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
+//                    if (imageViewNavHeader != null) {
+//                        Picasso.get().load(profileImageUrl).into(imageViewNavHeader);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     // Set navHeader to user's name
 //    public void setNavHeaderUsername() {
