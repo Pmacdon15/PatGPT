@@ -21,9 +21,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-
-
-
 import android.widget.Toast;
 
 import com.example.patgpt.DatabaseHelper;
@@ -137,10 +134,13 @@ public class LoginFragment extends Fragment {
     }
 
     public void signIn(String username, String password) {
+        if (username.equals("")) {
+            Toast.makeText(getContext(), "Please enter a username", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // check if you can remove nesting with return later
         if (databaseHelper.checkUser(username, password)) {
             LoggedInUser = username;
-            //saveUserEmail(LoggedInUser);
             UserData.saveUserEmail(requireContext(), LoggedInUser);
             //UserData.addProfileNavItem(requireActivity());
             navigateToHome();

@@ -66,6 +66,10 @@ public class RegistrationFragment extends Fragment {
             Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
             return;
         }
+        if(first_name.isEmpty() || last_name.isEmpty() || pass.isEmpty() || confirm_pass.isEmpty()) {
+            Toast.makeText(getActivity(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
         databaseHelper = new DatabaseHelper(getActivity());
         if (databaseHelper.addUser(LoginFragment.newUserName, first_name, last_name, pass)) {
             UserData.saveUserEmail(requireContext(),LoginFragment.newUserName);
