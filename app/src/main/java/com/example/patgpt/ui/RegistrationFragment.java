@@ -41,6 +41,7 @@ public class RegistrationFragment extends Fragment {
         return view;
     }
 
+    // Assign the views and buttons
     private void assignViewsAndButton(View view) {
         registerButton = view.findViewById(R.id.registration_button);
         firstname = view.findViewById(R.id.firstname);
@@ -49,10 +50,12 @@ public class RegistrationFragment extends Fragment {
         confirm_password = view.findViewById(R.id.confirm_password);
     }
 
+    // Create the onClickListeners
     public void createOnClickListeners() {
         registerButton.setOnClickListener(v -> registerUser());
     }
 
+    // Get the text values from the EditText fields
     public void getTextValues() {
         first_name = firstname.getText().toString();
         last_name = lastname.getText().toString();
@@ -60,19 +63,20 @@ public class RegistrationFragment extends Fragment {
         confirm_pass = confirm_password.getText().toString();
     }
 
+    // Register the user
     public void registerUser() {
         getTextValues();
         if (!confirmPasswordsMatch()) {
             Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(first_name.isEmpty() || last_name.isEmpty() || pass.isEmpty() || confirm_pass.isEmpty()) {
+        if (first_name.isEmpty() || last_name.isEmpty() || pass.isEmpty() || confirm_pass.isEmpty()) {
             Toast.makeText(getActivity(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
         databaseHelper = new DatabaseHelper(getActivity());
         if (databaseHelper.addUser(LoginFragment.newUserName, first_name, last_name, pass)) {
-            UserData.saveUserEmail(requireContext(),LoginFragment.newUserName);
+            UserData.saveUserEmail(requireContext(), LoginFragment.newUserName);
             Toast.makeText(getActivity(), "User Registered", Toast.LENGTH_SHORT).show();
             navigateToHome();
         } else {
@@ -80,6 +84,7 @@ public class RegistrationFragment extends Fragment {
         }
     }
 
+    // Check if the passwords match
     public boolean confirmPasswordsMatch() {
         if (pass.equals(confirm_pass)) {
             return true;
@@ -89,6 +94,7 @@ public class RegistrationFragment extends Fragment {
         return false;
     }
 
+    // Navigate to HomeFragment
     private void navigateToHome() {
         // If login is successful, navigate to HomeFragment
         NavController navController = Navigation.findNavController(requireView());

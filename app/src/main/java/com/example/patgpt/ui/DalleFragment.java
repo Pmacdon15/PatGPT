@@ -70,10 +70,12 @@ public class DalleFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_dalle, container, false);
+        // Set Views and Buttons
         Button buttonSend = root.findViewById(R.id.button_Send);
         imageViewContent = root.findViewById(R.id.ImageView_Content);
         editTextPrompt = root.findViewById(R.id.editText_Prompt);
 
+        // Set the onClickListeners
         buttonSend.setOnClickListener(view -> makeApiRequest());
         imageViewContent.setOnClickListener(view -> shareImageFromImageView());
 
@@ -132,8 +134,9 @@ public class DalleFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        // Create the request body
         RequestBody requestBody = RequestBody.Companion.create(jsonBody.toString(), JSON);
-
+        // Create the request
         Request request = new Request.Builder()
                 .url(URL)
                 .addHeader("Content-Type", "application/json")
@@ -185,7 +188,7 @@ public class DalleFragment extends Fragment {
         });
 
     }
-
+    // Close the keyboard and clear the EditText
     public void closeKeyboard(Context context, EditText editText) {
         // Clear the EditText
         editText.setText("");
@@ -193,7 +196,7 @@ public class DalleFragment extends Fragment {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
-
+    // Get the Bitmap from the ImageView
     private Bitmap getBitmapFromImageView(ImageView imageView) {
         Drawable drawable = imageView.getDrawable();
         if (drawable instanceof BitmapDrawable) {
@@ -201,7 +204,7 @@ public class DalleFragment extends Fragment {
         }
         return null;
     }
-
+    // Share the image from the ImageView
     public void shareImageFromImageView() {
         try {
             Activity activity = getActivity();
@@ -223,7 +226,7 @@ public class DalleFragment extends Fragment {
         }
     }
 
-
+    // Save the image from the ImageView locally
     public void saveImageLocally()  {
         Activity activity = getActivity();
         if (activity != null) {
@@ -242,7 +245,5 @@ public class DalleFragment extends Fragment {
             }
         }
     }
-
-
 
 }

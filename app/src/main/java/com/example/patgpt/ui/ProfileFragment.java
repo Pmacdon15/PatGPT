@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment {
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         LoggedInUser = UserData.loadUserEmail(requireContext());
-        // Set the username in the navigation header and set the image if it exists or set the google image
+        // Set the username in the navigation header and set the image if it exists locally
         UserData.setNavHeaders(getActivity());
     }
 
@@ -105,7 +105,7 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         imageSelector.launch(intent);
     }
-
+    // Register for Activity Result
     ActivityResultLauncher<Intent> imageSelector = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -122,12 +122,14 @@ public class ProfileFragment extends Fragment {
                             }
                         }
                     }
+                    // Save the image locally
                     saveImageLocally(imageUri);
+                    // Set the image to the imageView
                     imageViewProfile.setImageURI(imageUri);
                 }
             }
     );
-
+    // Save Image Locally
     public void saveImageLocally(Uri imageUri) {
         Activity activity = getActivity();
         if (activity != null) {
@@ -156,7 +158,7 @@ public class ProfileFragment extends Fragment {
         }
 
     }
-
+    // Set The Text views
     private void SetLastNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
             Log.d("LoggedInUser inside of SetLastNameTextView()", LoggedInUser);
@@ -169,6 +171,7 @@ public class ProfileFragment extends Fragment {
     }
 
     // Button Clicks
+    // Edit First Name
     public void editFirstNameProfilePage(View view) {
         Log.d("Maintenance", " Edit First Name Button Clicked");
         String newFirstName = editTextFirstName.getText().toString();
@@ -186,7 +189,7 @@ public class ProfileFragment extends Fragment {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
     }
-
+    // Edit Last Name
     public void editLastNameProfilePage(View view) {
         Log.d("Maintenance", " Edit Last Name Button Clicked");
         String newLastName = editTextLastName.getText().toString();
@@ -204,7 +207,7 @@ public class ProfileFragment extends Fragment {
             Log.e("Error", "An error occurred while accessing the database", e);
         }
     }
-
+    // Edit Password
     public void editPasswordProfilePage(View view) {
         Log.d("Maintenance", " Edit Password Button Clicked");
         String currentPassword = editTextPassword_Current.getText().toString();
@@ -223,7 +226,7 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-
+    // Set Profile Image
     public void setProfileImage() {
         Activity activity = getActivity();
         if (activity != null) {

@@ -37,7 +37,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HomeFragment extends Fragment {
-
+    // API URL
     private static final String URL = "https://api.openai.com/v1/chat/completions";
     private TextView textViewContent;
     private EditText editTextPrompt;
@@ -49,13 +49,15 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
+        // Set Views and Buttons
         Button buttonSend = root.findViewById(R.id.button_Send);
         textViewContent = root.findViewById(R.id.textView_Content);
         editTextPrompt = root.findViewById(R.id.editText_Prompt);
 
+        // Set the onClickListeners
         buttonSend.setOnClickListener(view -> makeApiRequest());
         textViewContent.setOnClickListener(this::shareContent);
+
         // Set the User
         LoggedInUser = UserData.loadUserEmail(requireContext());
 
@@ -67,6 +69,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        // Save the content of the textViewContent
         outState.putString("savedContent", textViewContent.getText().toString());
     }
 
@@ -77,6 +80,7 @@ public class HomeFragment extends Fragment {
             String savedContent = savedInstanceState.getString("savedContent");
             textViewContent.setText(savedContent);
         }
+        // The above if seems redundant but it removes a warning in the IDE.
     }
 
     @Override
@@ -87,6 +91,7 @@ public class HomeFragment extends Fragment {
 
 
     private String getAPIKey(Context context) {
+        // Get the API Key from the environment.xml file
         //Log.d("API_KEY", context.getString(R.string.API_KEY));
         return context.getString(R.string.API_KEY);
     }
@@ -97,6 +102,7 @@ public class HomeFragment extends Fragment {
         // set textViewContent to loading string
         textViewContent.setText(R.string.loading);
 
+        // Create an OkHttpClient object with increased timeouts for better performance
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS) // Increase connect timeout
                 .writeTimeout(30, TimeUnit.SECONDS)   // Increase write timeout
@@ -107,6 +113,7 @@ public class HomeFragment extends Fragment {
 
         JSONObject jsonBody = new JSONObject();
         try {
+            // Create the request body
             jsonBody.put("model", "gpt-3.5-turbo");
             JSONArray messages = new JSONArray();
             JSONObject message = new JSONObject();
@@ -119,7 +126,7 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
         RequestBody requestBody = RequestBody.Companion.create(jsonBody.toString(), JSON);
-
+        // Create the request
         Request request = new Request.Builder()
                 .url(URL)
                 .addHeader("Content-Type", "application/json")
@@ -197,96 +204,6 @@ public class HomeFragment extends Fragment {
             Log.d("HistoryFragment", "History added successfully");
         }
     }
-
-//    public boolean checkForImageFile() {
-//        Activity activity = getActivity();
-//        if (activity != null) {
-//            String fileName = LoggedInUser + "profileImage.jpg";
-//            Log.d("File Check", "Checking for " + fileName);
-//            if (fileName.equals("profileImage.jpg")) {
-//                // Do not load the image this is from Earlier iterations before loginViewModel.profileUsername was implemented
-//                Log.d("File Check", "No profile image to load");
-//                return false;
-//            }
-//            File file = activity.getFileStreamPath(fileName);
-//            if (file == null || !file.exists()) {
-//                Log.d("File Check", fileName + " does not exist.");
-//            } else {
-//                Log.d("File Check", fileName + " exists.");
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-//    public void setNavHeaderImage() {
-//        Activity activity = getActivity();
-//        if (activity != null) {
-//            File file = activity.getFileStreamPath(LoggedInUser + "profileImage.jpg");
-//            if (file.exists()) {
-//                Uri imageUri = Uri.fromFile(file);
-//                NavigationView navigationView = activity.findViewById(R.id.nav_view);
-//                if (navigationView != null) {
-//                    View headerView = navigationView.getHeaderView(0);
-//                    ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
-//                    if (imageViewNavHeader != null) {
-//                        Log.d("HomeFragment", "Setting nav header image" + imageUri);
-//                        imageViewNavHeader.setImageURI(imageUri);
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-//    private String loadProfileImage() {
-//        if (getContext() != null) {
-//            return getContext().getSharedPreferences("LoggedInUser", 0).getString("profileImage", "");
-//        }
-//        return "";
-//    }
-
-    // Set navHeader to user's profile image using Picasso and loadProfileImage()
-//    private void setNavHeaderGoogleImage() {
-//        Activity activity = getActivity();
-//        if (activity != null) {
-//            String profileImageUrl = UserData.loadGoogleProfileImage(activity);
-//            if (!profileImageUrl.isEmpty()) {
-//                NavigationView navigationView = activity.findViewById(R.id.nav_view);
-//                if (navigationView != null) {
-//                    View headerView = navigationView.getHeaderView(0);
-//                    ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
-//                    if (imageViewNavHeader != null) {
-//                        Picasso.get().load(profileImageUrl).into(imageViewNavHeader);
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-    // Set navHeader to user's name
-//    public void setNavHeaderUsername() {
-//        Activity activity = getActivity();
-//        if (activity != null) {
-//            NavigationView navigationView = activity.findViewById(R.id.nav_view);
-//            if (navigationView != null) {
-//                View headerView = navigationView.getHeaderView(0);
-//                TextView textViewNavHeader = headerView.findViewById(R.id.textView);
-//                if (textViewNavHeader != null) {
-//                    textViewNavHeader.setText(LoggedInUser);
-//                }
-//            } else {
-//                Log.d("HomeFragment", "navigationView is null");
-//            }
-//        }
-//    }
-//
-//    // Get LoggedInUser from SharedPreferences
-//    public String loadUserEmail() {
-//        if (getContext() != null) {
-//            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
-//        }
-//        return "";
-//    }
 
     @Override
     public void onDestroyView() {
