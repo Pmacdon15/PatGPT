@@ -61,6 +61,7 @@ public class HomeFragment extends Fragment {
         // Set the User
         LoggedInUser = UserData.loadUserEmail(requireContext());
 
+        // Log the user
         Log.d("HomeFragment", "onCreateView: " + LoggedInUser);
 
         return root;
@@ -72,7 +73,7 @@ public class HomeFragment extends Fragment {
         // Save the content of the textViewContent
         outState.putString("savedContent", textViewContent.getText().toString());
     }
-
+    // TODO: Remove nullable and I might be able remove the redundant if statement
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -97,6 +98,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void makeApiRequest() {
+        // Get the API Key
         String API_KEY = getAPIKey(requireContext());
         String prompt = editTextPrompt.getText().toString();
         // set textViewContent to loading string
@@ -113,7 +115,7 @@ public class HomeFragment extends Fragment {
 
         JSONObject jsonBody = new JSONObject();
         try {
-            // Create the request body
+            // Create the request body and set the model, messages, and temperature
             jsonBody.put("model", "gpt-3.5-turbo");
             JSONArray messages = new JSONArray();
             JSONObject message = new JSONObject();
@@ -165,7 +167,7 @@ public class HomeFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-
+            // Handle the failure of the request
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e("OkHttpError", "Error: " + e);
@@ -173,7 +175,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
+    // Close the keyboard for after the user has sent the message
     public void closeKeyboard(Context context, EditText editText) {
         // Clear the EditText
         editText.setText("");
@@ -181,7 +183,7 @@ public class HomeFragment extends Fragment {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
-
+    // Share the content of the textViewContent
     public void shareContent(View view) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -191,7 +193,7 @@ public class HomeFragment extends Fragment {
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         startActivity(shareIntent);
     }
-
+    // Save the history to the database
     public void saveHistory(String content) {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getActivity())) {
             if (!databaseHelper.addHistoryForUser(LoggedInUser, content)) {

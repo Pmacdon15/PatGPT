@@ -42,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older table if existed
+        // Drop older table if existed and create new tables
         db.execSQL("DROP TABLE IF EXISTS " + UserDB.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + HistoryDB.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + HistoryGoogleUserDB.TABLE_NAME);
@@ -53,16 +53,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Method to query email and password from the database
     public boolean checkUser(String email, String password) {
+        // Select All Query from the UserDB
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + UserDB.TABLE_NAME + " WHERE "
                 + UserDB.COLUMN_EMAIL + " = ? AND "
                 + UserDB.COLUMN_PASSWORD + " = ?";
+        // Get the cursor which contains the result
         Cursor cursor = db.rawQuery(query, new String[]{email, password});
         boolean result = cursor.getCount() > 0;
+        // Close the cursor
         cursor.close();
+        // return the result
         return result;
     }
-
+    // Method to check if the user exists in the database returns true if the user exists
     public boolean doesUserExist(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + UserDB.TABLE_NAME + " WHERE "
@@ -72,17 +76,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return result;
     }
+    // Method to check if the user exists in the database returns true if the user exists
     private boolean isGoogleUser(String email) {
+        // Select All Query from the HistoryGoogleUserDB returns true if the user is a Google user
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + HistoryGoogleUserDB.TABLE_NAME + " WHERE "
                 + HistoryGoogleUserDB.COLUMN_USER_E_MAIL + " = ?";
+        // Get the cursor which contains the result
         Cursor cursor = db.rawQuery(query, new String[]{email});
         boolean isGoogleUser = cursor.getCount() > 0;
         cursor.close();
         return isGoogleUser;
     }
-
+    // Method to add a user to the database returns true if the user is added successfully
     public boolean addUser(String email, String firstName, String lastName, String password) {
+        // Inserting Row in the UserDB
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserDB.COLUMN_EMAIL, email);
@@ -90,16 +98,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(UserDB.COLUMN_LAST_NAME, lastName);
         values.put(UserDB.COLUMN_PASSWORD, password);
         long newRowId = db.insert(UserDB.TABLE_NAME, null, values);
+        // Return true if the user is added successfully
         return newRowId != -1;
     }
+    // Method to add a Google user to the database returns true if the user is added successfully
     public String getFirstName(String email) {
+        // Select All Query from the UserDB to get the first name based on email
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " + UserDB.COLUMN_FIRST_NAME + " FROM " + UserDB.TABLE_NAME + " WHERE "
                 + UserDB.COLUMN_EMAIL + " = ?";
+        // Get the cursor which contains the result
         Cursor cursor = db.rawQuery(query, new String[]{email});
         String firstName = "";
         if (cursor.moveToFirst()) {
             int columnIndex = cursor.getColumnIndex(UserDB.COLUMN_FIRST_NAME);
+            // if the column index is not -1 then get the first name
             if (columnIndex != -1) {
                 firstName = cursor.getString(columnIndex);
             }
@@ -107,6 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return firstName;
     }
+    // Method to get the last name based on email returns the last name
     public String getLastName(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT " + UserDB.COLUMN_LAST_NAME + " FROM " + UserDB.TABLE_NAME + " WHERE "
@@ -115,6 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String lastName = "";
         if (cursor.moveToFirst()) {
             int columnIndex = cursor.getColumnIndex(UserDB.COLUMN_LAST_NAME);
+            // if the column index is not -1 then get the last name
             if (columnIndex != -1) {
                 lastName = cursor.getString(columnIndex);
             }
@@ -122,21 +137,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return lastName;
     }
-
+    // Method to edit the first name based on email returns true if the first name is edited successfully
     public boolean editUserFirstNameDB(String email, String newFirstName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserDB.COLUMN_FIRST_NAME, newFirstName);
         int rowsAffected = db.update(UserDB.TABLE_NAME, values, UserDB.COLUMN_EMAIL + " = ?", new String[]{email});
+        // if the rows affected is greater than 0 then return true becuase there is a successful edit
         return rowsAffected > 0;
     }
+    // Method to edit the last name based on email returns true if the last name is edited successfully
     public boolean editUserLastNameDB(String email, String newLastName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserDB.COLUMN_LAST_NAME, newLastName);
         int rowsAffected = db.update(UserDB.TABLE_NAME, values, UserDB.COLUMN_EMAIL + " = ?", new String[]{email});
+        // if the rows affected is greater than 0 then return true becuase there is a successful edit
         return rowsAffected > 0;
     }
+    // Method to confirm the user password based on email returns true if the password is correct
     private boolean confirmUserPasswordDB(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + UserDB.TABLE_NAME + " WHERE "
@@ -145,21 +164,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, new String[]{email, password});
         boolean result = cursor.getCount() > 0;
         cursor.close();
+        // result is true if the password is correct
         return result;
     }
+    // Method to edit the user password based on email returns true if the password is edited successfully
     public boolean editUserPasswordDB(String email, String currentPassword, String newPassword, String confirmPassword) {
         // Check if the current password is correct
-        if (!confirmUserPasswordDB(email, currentPassword)) return false;
+        if (!confirmUserPasswordDB(email, currentPassword)) return false; // return false if the password is incorrect
         // Check if the new password and confirm password match
-        if (!newPassword.equals(confirmPassword)) return false;
-
+        if (!newPassword.equals(confirmPassword)) return false; // return false if the new password and confirm password do not match
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserDB.COLUMN_PASSWORD, newPassword);
         int rowsAffected = db.update(UserDB.TABLE_NAME, values, UserDB.COLUMN_EMAIL + " = ? AND " + UserDB.COLUMN_PASSWORD + " = ?", new String[]{email, currentPassword});
         return rowsAffected > 0;
     }
-
+    // Method to get the user id based on email returns the history for user
     public Cursor getHistoryForUser(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         // Querying UserDB to get userId based on email
@@ -182,7 +202,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // You can return the cursor here, and handle it accordingly in the calling code
         return historyCursor;
     }
-
+    // Method to get the user id based on email returns history for Google user
     public Cursor getHistoryForGoogleUser(String email) {
         try{
             SQLiteDatabase db = this.getReadableDatabase();
@@ -194,9 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return null;
         }
     }
-
-
-
+    // Method to delete the history for the user returns true if the history is deleted successfully
     public Boolean deleteHistoryForUser(String email) {
         SQLiteDatabase db = this.getWritableDatabase();
 

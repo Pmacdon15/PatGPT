@@ -213,7 +213,9 @@ public class DalleFragment extends Fragment {
                 File savedImageFile = new File(activity.getFilesDir(), "sharedImage.jpg");
                 // Create an Intent to share the image
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                // Set the type of the intent to image
                 shareIntent.setType("image/jpeg");
+                // Get the Uri of the saved image file
                 Uri uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".fileprovider", savedImageFile);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // Add this line

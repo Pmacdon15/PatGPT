@@ -17,12 +17,13 @@ import com.example.patgpt.R;
 import com.example.patgpt.UserData;
 
 public class HistoryFragment extends Fragment {
+    // Declare variables
     private DatabaseHelper databaseHelper;
     private String LoggedInUser;
     private TextView textViewContent;
     private Button clearHistoryButton;
 
-
+    // Constructor
     public HistoryFragment() {
         // Required empty public constructor
     }
@@ -32,41 +33,48 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         assignViews(view); // Call assignViews() before accessing textViewContent
+        // create a new instance of DatabaseHelper
         databaseHelper = new DatabaseHelper(getActivity());
+        // Load the history for the current user
         LoggedInUser = UserData.loadUserEmail(requireContext());
+        // Set the text view content
         textViewContent.setText(loadHistoryForUser());
+        // Assign the clear history button
         assignButton(view);
         clearHistoryButton.setOnClickListener(v -> clearHistory());
         return view;
     }
-
+    // Restore the view state
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        // Load the history for the current user
         LoggedInUser = UserData.loadUserEmail(requireContext());
         UserData.setNavHeaders(getActivity());
     }
-
+    // Assign the views
     public void assignViews(View view) {
         textViewContent = view.findViewById(R.id.textView_Content);
     }
-
+    // Assign the clear history button
     public void assignButton(View view) {
         clearHistoryButton = view.findViewById(R.id.button_Clear);
     }
-
+    // Load the history for the current user
     public String loadHistoryForUser() {
+        // Load the history for the current user
         Cursor cursor = databaseHelper.getHistoryForUser(LoggedInUser);
-
+        // Create a new StringBuilder
         StringBuilder historyContentBuilder = new StringBuilder();
         if (cursor == null || cursor.getCount() == 0) { // Check if cursor is null or empty
             cursor = databaseHelper.getHistoryForGoogleUser(LoggedInUser); // Fallback to Google user history
         }
-
+        // Check if cursor is not null
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {
                     int resultIndex = cursor.getColumnIndex(HistoryDB.COLUMN_RESULT);
                     do {
+                        // Get the result from the cursor and append it to the StringBuilder
                         String result = cursor.getString(resultIndex);
                         historyContentBuilder.append(result).append("\n \n \n");
                         // No need to log id and userId for Google user history
@@ -74,6 +82,7 @@ public class HistoryFragment extends Fragment {
                     } while (cursor.moveToNext());
                 }
             } finally {
+                // Remember to close the cursor
                 cursor.close();
             }
 
@@ -84,8 +93,7 @@ public class HistoryFragment extends Fragment {
         }
         return historyContentBuilder.toString();
     }
-
-
+    // Clear history for the current user
     public void clearHistory() {
         // Clear history for the current user
         boolean isHistoryCleared = databaseHelper.deleteHistoryForUser(LoggedInUser);
@@ -97,12 +105,6 @@ public class HistoryFragment extends Fragment {
             textViewContent.setText("");
         }
     }
-//    private String loadUserEmail() {
-//        if (getContext() != null) {
-//            return getContext().getSharedPreferences("LoggedInUser", 0).getString("email", "");
-//        }
-//        return "";
-//    }
 
 
 }

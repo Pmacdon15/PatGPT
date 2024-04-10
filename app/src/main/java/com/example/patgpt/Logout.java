@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -42,13 +44,25 @@ public class Logout extends Fragment {
     }
 
     public void signOut() {
-        //deleteSharedPreferencesLoggedInUser();
-        //resetNavHeaderImage();
+
         UserData.clearSharedPreference(requireActivity());
         googleSignOut();
         UserData.resetNavHeaderImage(requireActivity());
+        clearFragmentHistory();
+
 
     }
+
+    private void clearFragmentHistory() {
+        // Clear the fragment history
+        FragmentManager fm = requireActivity().getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+
+
+    }
+
 
     public void googleSignOut() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -56,14 +70,13 @@ public class Logout extends Fragment {
                 .build();
         GoogleSignInClient gsc = GoogleSignIn.getClient(requireContext(), gso);
 
-
         gsc.signOut().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 navigateToLogin();
             } else {
                 // Handle sign-out failure
                 Log.d("Logout", "Sign out failed: " + task.getException());
-                // Optionally display a toast or some UI feedback to the user
+
             }
         });
     }
@@ -72,26 +85,6 @@ public class Logout extends Fragment {
         NavController navController = Navigation.findNavController(requireView());
         navController.navigate(R.id.nav_login);
     }
-
-    // Delete shared preferences loggedInUser
-//    public void deleteSharedPreferencesLoggedInUser() {
-//        requireActivity().getSharedPreferences("LoggedInUser", 0).edit().clear().apply();
-//
-//    }
-
-//    public void resetNavHeaderImage() {
-//        Activity activity = getActivity();
-//        if (activity != null) {
-//            NavigationView navigationView = activity.findViewById(R.id.nav_view);
-//            if (navigationView != null) {
-//                View headerView = navigationView.getHeaderView(0);
-//                ImageView imageViewNavHeader = headerView.findViewById(R.id.imageView);
-//                if (imageViewNavHeader != null) {
-//                    imageViewNavHeader.setImageResource(R.mipmap.ic_launcher_round);
-//                }
-//            }
-//        }
-//    }
 
 
     @Override

@@ -37,16 +37,16 @@ import java.io.InputStream;
 
 
 public class ProfileFragment extends Fragment {
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    // Declare variables
     private ImageView imageViewProfile;
     private TextView textviewFirstName;
     private EditText editTextFirstName;
     private TextView textviewLastName;
     private EditText editTextLastName, editTextPassword_Current, editTextPassword_New, editTextPassword_Confirm;
     private String LoggedInUser;
-
+    public ProfileFragment() {
+        // Required empty public constructor
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +57,11 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
+        // Load the user email from the shared preferences
         LoggedInUser = UserData.loadUserEmail(requireContext());
+        // Initialize the views
         initializeViews(root);
+        // Set the profile image if it exists
         setProfileImage();
         Log.d("ProfileFragment","LoggedInUser "+ LoggedInUser);
 
@@ -67,6 +70,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        // Load the user email from the shared preferences
         LoggedInUser = UserData.loadUserEmail(requireContext());
         // Set the username in the navigation header and set the image if it exists locally
         UserData.setNavHeaders(getActivity());
@@ -146,7 +150,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    // Set The Text views
+    // Set First Name Text views
     private void SetFirstNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
             String currentFirstName = databaseHelper.getFirstName(LoggedInUser);
@@ -158,7 +162,7 @@ public class ProfileFragment extends Fragment {
         }
 
     }
-    // Set The Text views
+    // Set Last Name Text views
     private void SetLastNameTextView() {
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
             Log.d("LoggedInUser inside of SetLastNameTextView()", LoggedInUser);
